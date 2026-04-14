@@ -12,23 +12,6 @@ Proyecto web que permite visualizar productos como vinos y bebidas, con navegaci
 - PHP
 - Bootstrap
 
-## 🚀 Instalación
-
-1. Clonar repositorio:
-git clone https://github.com/mauroalias/vinasdeltaragui.git
-
-2. Instalar dependencias:
-composer install
-
-3. Copiar archivo de entorno:
-cp .env.example .env
-
-4. Generar clave:
-php artisan key:generate
-
-5. Levantar servidor:
-php artisan serve
-
 ## 📂 Estructura
 
 - `resources/views/frontend` → vistas del usuario
