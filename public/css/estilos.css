@@ -1,33 +1,64 @@
-body {
-font-family: Arial;
-background-color: #d20808;
-margin: 40px;
-}
-.container {
-background: rgb(147, 171, 10);
-padding: 20px;
-border-radius: 10px;
-max-width: 600px;
-}
-h1 {
-color: #333;
-}
-p {
-line-height: 1.6;
+.barra-productos {
+    width: 100%;
+    background-color: #21000e; 
+    padding: 30px 0;
+    text-align: center;
+    margin-bottom: 50px;
 }
 
-.navbar {
-    background-color: #333;
-    padding: 10px;
+.barra-productos h2 {
+    color: #ffffff; 
+    font-weight: normal;
+    font-style: italic; 
+    letter-spacing: 2px;
 }
 
-.navbar a {
-    color: white;
+
+.footer {
+    background-color: #111;
+    color: #ccc;
+}
+
+.footer h5 {
+    color: #d4af37; /* dorado */
+    margin-bottom: 15px;
+}
+
+.footer a {
+    color: #ccc;
     text-decoration: none;
-    margin-right: 15px;
-    font-weight: bold;
 }
 
-.navbar a:hover {
-    text-decoration: underline;
+.footer a:hover {
+    color: #d4af37;
 }
+
+.footer-bottom {
+    background-color: #000;
+    color: #aaa;
+    padding: 15px;
+    font-size: 14px;
+}
+
+/* ICONOS REDES */
+.social-icon {
+    font-size: 20px;
+    color: #fff;
+}
+
+.social-icon:hover {
+    color: #d4af37;
+}
+
+
+/* INPUT */
+.footer input {
+    border-radius: 0;
+}
+
+.footer .btn-warning {
+    background-color: #d4af37;
+    border: none;
+    color: #000;
+}
+

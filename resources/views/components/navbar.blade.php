@@ -1,28 +1,64 @@
 <header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="/">
-            <img src="{{ asset('img/logo.png') }}" width="165">
-        </a>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container-fluid">
 
-        <div class="collapse navbar-collapse">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/inicio">COMERCIALIZACIÓN</a>
-            </li>
+            <!-- LOGO -->
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ asset('img/logo1.png') }}" width="180">
+            </a>
 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                CATÁLOGO
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">VINOS</a></li>
-                <li><a class="dropdown-item" href="#">WHISKYS</a></li>
-                <li><a class="dropdown-item" href="#">OTROS</a></li>
-              </ul>
-            </li>
-          </ul>
+            <!-- BOTÓN RESPONSIVE -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- CONTENIDO -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <!-- IZQUIERDA -->
+                <ul class="navbar-nav me-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">NUESTRA EMPRESA</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/inicio">COMERCIALIZACIÓN</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            CATÁLOGO
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">VINOS</a></li>
+                            <li><a class="dropdown-item" href="#">WHISKYS</a></li>
+                            <li><a class="dropdown-item" href="#">OTROS</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <!-- DERECHA -->
+                <ul class="navbar-nav ms-auto align-items-center">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">REGISTRARSE</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">INICIAR SESIÓN</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            🛒 <span class="badge bg-danger">0</span>
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
         </div>
-      </div>
     </nav>
 </header>
