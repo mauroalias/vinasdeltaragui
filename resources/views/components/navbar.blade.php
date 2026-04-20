@@ -19,7 +19,7 @@
                 <ul class="navbar-nav me-auto">
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">NUESTRA EMPRESA</a>
+                        <a class="nav-link" href="/empresa">NUESTRA EMPRESA</a>
                     </li>
 
                     <li class="nav-item">

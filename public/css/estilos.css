@@ -50,7 +50,6 @@
     color: #d4af37;
 }
 
-
 /* INPUT */
 .footer input {
     border-radius: 0;
@@ -62,3 +61,107 @@
     color: #000;
 }
 
+/* HERO */
+.hero-empresa {
+    height: 400px;
+    background-image: url('/img/nuestraempresa1.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.hero-empresa::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.hero-empresa div {
+    position: relative;
+    z-index: 2;
+    color: white;
+}
+
+.titulo-hero {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.subtitulo-hero {
+    font-size: 1.2rem;
+    font-style: italic;
+}
+
+/* IMAGEN FINAL */
+.imagen-empresa img {
+    max-height: 400px;
+    object-fit: cover;
+}
+
+/* CAJITAS DE TITULOS */
+.titulo-caja {
+    display: inline-block;
+    padding: 10px 25px;
+    border: none;
+    background-color: #d4af37;
+    color: #fff;
+    border-radius: 10px;
+    font-weight: bold;
+}
+.titulo-caja:hover {
+    background-color: #d4af37;
+    color: #fff;
+    border-color: #d4af37;
+    transition: 0.3s;
+}
+
+/* ACORDEON VINOTECA */
+
+.accordion-item {
+    border: none;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* BOTÓN NORMAL */
+.accordion-button {
+    background-color: #f8f8f8;
+    color: #333;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+/* HOVER */
+.accordion-button:hover {
+    background-color: #6b0f1a;
+    color: white;
+}
+
+/* ACTIVO */
+.accordion-button:not(.collapsed) {
+    background-color: #6b0f1a;
+    color: white;
+}
+
+/* CUERPO */
+.accordion-body {
+    background-color: #ffffff;
+    color: #444;
+    border-left: 4px solid #6b0f1a;
+    padding: 15px;
+    line-height: 1.6;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+
+/* FLECHA */
+.accordion-button::after {
+    filter: brightness(0) invert(1); /* blanco */
+}

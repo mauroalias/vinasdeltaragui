@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactoController;
-
+use App\Http\Controllers\EmpresaController;
 
 Route::get('/', function () {
     return view('frontend.inicio');
@@ -17,4 +17,5 @@ Route::get('/terminosyusos', function () {
 });
 
 
+Route::get('/empresa', [EmpresaController::class, 'index']);
 Route::post('/contacto', [ContactoController::class, 'procesar']);
