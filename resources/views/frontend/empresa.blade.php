@@ -49,7 +49,7 @@
     </div>
 </div>
 
-<!-- FAQ -->
+<!-- PREGUNTAS Y RESPUESTAS -->
 <div class="barra-productos">
     <h2>PREGUNTAS FRECUENTES</h2>
 </div>

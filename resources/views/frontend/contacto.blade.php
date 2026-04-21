@@ -49,7 +49,7 @@
                     <ul class="list-unstyled fs-5 ms-3"> 
                         <li class="mb-4">
                             📍 <strong>Dirección:</strong><br> 
-                            <span class="text-white-50">Boca 123, Corrientes.</span>
+                            <span class="text-white-50">San Juan 1567, Corrientes.</span>
                         </li>
                         <li class="mb-4">
                             📞 <strong>Teléfono:</strong><br> 
@@ -76,5 +76,12 @@
             </div>
 
         </div> </div>
-
+    <div class="container my-4">
+  <div class="ratio ratio-16x9">
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d884.9537008653035!2d-58.83802293047758!3d-27.475024408675147!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94456c98f5b367a9%3A0x3cb2476a3e14bb6a!2sSan%20Juan%201567%2C%20W3400%20CBV%2C%20Corrientes!5e0!3m2!1ses-419!2sar!4v1776776503567!5m2!1ses-419!2sar" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>
 </x-layout>

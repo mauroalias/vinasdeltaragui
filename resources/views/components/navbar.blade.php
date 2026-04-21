@@ -23,7 +23,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/inicio">COMERCIALIZACIÓN</a>
+                        <a class="nav-link" href="/comercializacion">COMERCIALIZACIÓN</a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -43,11 +43,11 @@
                 <ul class="navbar-nav ms-auto align-items-center">
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">REGISTRARSE</a>
+                        <a class="nav-link" href="/registro">REGISTRARSE</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">INICIAR SESIÓN</a>
+                        <a class="nav-link" href="/iniciosesion">INICIAR SESIÓN</a>
                     </li>
 
                     <li class="nav-item">
