@@ -27,8 +27,8 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            CATÁLOGO
+                        <a class="nav-link d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown">
+                            CATÁLOGO <span class="flecha">▾</span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">VINOS</a></li>

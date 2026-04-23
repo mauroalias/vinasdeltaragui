@@ -1,3 +1,129 @@
+.navbar .nav-link {
+    color: #ffffff !important;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin: 0 8px;
+    transition: 0.3s;
+    position: relative;
+}
+
+.navbar .nav-link:hover {
+    color: #d4af37 !important; /* dorado elegante */
+}
+
+.navbar .nav-link::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: #d4af37;
+    left: 0;
+    bottom: -5px;
+    transition: 0.3s;
+}
+
+.navbar .nav-link:hover::after {
+    width: 100%;
+}
+
+.navbar .nav-item:last-child .nav-link {
+    margin-left: 10px;
+}
+
+.btn-navbar {
+    border: 1px solid #d4af37;
+    padding: 5px 12px;
+    border-radius: 6px;
+    color: #d4af37 !important;
+}
+
+.btn-navbar:hover {
+    background-color: #d4af37;
+    color: #000 !important;
+}
+
+.navbar {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.navbar .badge {
+    font-size: 10px;
+    position: relative;
+    top: -5px;
+}
+
+.navbar .dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+}
+
+.flecha {
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+/* DROPDOWN */
+.dropdown-menu {
+    background-color: #212529; /* mismo tono que navbar bg-dark */
+    border: none;
+    border-radius: 8px;
+    padding: 10px 0;
+    margin-top: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* ITEMS */
+.dropdown-item {
+    color: #ffffff;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    transition: 0.3s;
+}
+
+/* HOVER */
+.dropdown-item:hover {
+    background-color: transparent;
+    color: #d4af37; /* dorado como navbar */
+    padding-left: 25px;
+}
+
+/* CLICK */
+.dropdown-item:active {
+    background-color: transparent;
+}
+
+.dropdown-menu {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: 0.3s;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    position: relative;
+}
+
+.dropdown-item::after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    bottom: 5px;
+    width: 0;
+    height: 2px;
+    background-color: #d4af37;
+    transition: 0.3s;
+}
+
+.dropdown-item:hover::after {
+    width: 20px;
+}
+
 .barra-productos {
     width: 100%;
     background-color: #21000e; 
@@ -96,12 +222,6 @@
     font-style: italic;
 }
 
-/* IMAGEN FINAL */
-.imagen-empresa img {
-    max-height: 400px;
-    object-fit: cover;
-}
-
 /* CAJITAS DE TITULOS */
 .titulo-caja {
     display: inline-block;
@@ -121,6 +241,87 @@
 
 /* ACORDEON VINOTECA */
 
+/* ===== TITULO ===== */
+.titulo-seccion {
+    margin-top: 40px;
+    margin-bottom: 50px;
+}
+
+.titulo-seccion h1 {
+    font-weight: bold;
+    color: #333;
+}
+
+.titulo-seccion p {
+    color: #777;
+}
+
+
+/* ===== BARRA BENEFICIOS ===== */
+.barra-comercial {
+    background-color: #fafafa;
+    padding: 50px 0;
+    margin-bottom: 70px;
+}
+
+.barra-comercial h5 {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.barra-comercial p {
+    color: #666;
+    font-size: 14px;
+}
+
+
+/* ===== ICONOS BENEFICIOS ===== */
+.icono-comercial {
+    font-size: 35px;
+    color: #444444;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.icono-comercial:hover {
+    transform: scale(1.1);
+    color: #198754; /* bordó elegante */
+}
+
+
+/* ===== SECCION PAGOS ===== */
+.seccion-pago {
+    margin-bottom: 40px;
+}
+
+
+/* ===== ICONOS PAGOS ===== */
+.icono-pago {
+    font-size: 40px;
+    color: #0f466b;
+    margin-bottom: 10px;
+}
+
+
+/* ===== TARJETAS ===== */
+.sombra-hover {
+    transition: 0.3s;
+    border: none;
+    border-radius: 10px;
+}
+
+.sombra-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+
+/* ===== ACORDEON ===== */
+.accordion {
+    max-width: 900px;
+    margin: 0 auto 60px auto;
+}
+
 .accordion-item {
     border: none;
     margin-bottom: 12px;
@@ -128,7 +329,6 @@
     overflow: hidden;
 }
 
-/* BOTÓN NORMAL */
 .accordion-button {
     background-color: #f8f8f8;
     color: #333;
@@ -136,19 +336,16 @@
     transition: 0.3s;
 }
 
-/* HOVER */
 .accordion-button:hover {
     background-color: #6b0f1a;
     color: white;
 }
 
-/* ACTIVO */
 .accordion-button:not(.collapsed) {
     background-color: #6b0f1a;
     color: white;
 }
 
-/* CUERPO */
 .accordion-body {
     background-color: #ffffff;
     color: #444;
@@ -161,7 +358,7 @@
     box-shadow: none;
 }
 
-/* FLECHA */
+/* flecha blanca */
 .accordion-button::after {
-    filter: brightness(0) invert(1); /* blanco */
+    filter: brightness(0) invert(1);
 }

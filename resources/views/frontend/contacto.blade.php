@@ -53,7 +53,7 @@
                         </li>
                         <li class="mb-4">
                             📞 <strong>Teléfono:</strong><br> 
-                            <span class="text-white-50">+54 379 4123456</span>
+                            <span class="text-white-50">+54 379 4152512</span>
                         </li>
                         <li class="mb-4">
                             ✉️ <strong>Correo:</strong><br> 
