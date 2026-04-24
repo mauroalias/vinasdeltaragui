@@ -46,7 +46,7 @@
                     <div class="card-body">
                         <h5 class="card-title">VINOS</h5>
                         <p class="card-text">Una cuidada selección de etiquetas de las mejores bodegas para acompañar tus grandes momentos.</p>
-                        <a href="#" class="btn btn-primary">Comprar</a>
+                        <a href="/catalogo/vinos" class="btn btn-primary">Comprar</a>
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                     <div class="card-body">
                         <h5 class="card-title">WHISKYS</h5>
                         <p class="card-text">Carácter y distinción absoluta. Descubre maltas excepcionales y blends de prestigio mundial.</p>
-                        <a href="#" class="btn btn-primary">Comprar</a>
+                        <a href="/catalogo/whiskys" class="btn btn-primary">Comprar</a>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                     <div class="card-body">
                         <h5 class="card-title">OTROS</h5>
                         <p class="card-text">Desde destilados premium hasta licores dulces. Todo lo que necesitas para armar la barra perfecta.</p>
-                        <a href="#" class="btn btn-primary">Comprar</a>
+                        <a href="/catalogo/otros" class="btn btn-primary">Comprar</a>
                     </div>
                 </div>
             </div>

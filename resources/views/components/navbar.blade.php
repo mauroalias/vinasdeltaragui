@@ -31,9 +31,9 @@
                             CATÁLOGO <span class="flecha">▾</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">VINOS</a></li>
-                            <li><a class="dropdown-item" href="#">WHISKYS</a></li>
-                            <li><a class="dropdown-item" href="#">OTROS</a></li>
+                            <li><a class="dropdown-item" href="/catalogo/vinos">VINOS</a></li>
+                            <li><a class="dropdown-item" href="/catalogo/whiskys">WHISKYS</a></li>
+                            <li><a class="dropdown-item" href="/catalogo/otros">OTROS</a></li>
                         </ul>
                     </li>
 
@@ -52,7 +52,12 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            🛒 <span class="badge bg-danger">0</span>
+                            <button class="btn nav-link position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelCarrito">
+                                🛒
+                                <span class="badge bg-danger">
+                                 {{ session('carrito') ? count(session('carrito')) : 0 }}
+                                 </span>
+                            </button>
                         </a>
                     </li>
 

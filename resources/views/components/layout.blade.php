@@ -26,5 +26,6 @@
     <x-footer />
 
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    @include('frontend.carrito-panel')
 </body>
 </html>

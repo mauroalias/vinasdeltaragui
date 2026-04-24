@@ -7,7 +7,11 @@
             <div class="card-body p-4">
 
                 <h3 class="text-center mb-4">Registro</h3>
-
+                @if(session('mensaje'))
+                <div class="alert alert-warning text-center">
+                    {{ session('mensaje') }}
+                </div>
+                @endif
                 <form action="/registro" method="POST">
                     @csrf
 

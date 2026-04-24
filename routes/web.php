@@ -6,6 +6,8 @@ use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\ComercializacionController;
 use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\InicioSesionController;
+use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\CarritoController;
 
 Route::get('/', function () {
     return view('frontend.inicio');
@@ -27,11 +29,11 @@ Route::get('/iniciosesion', function () {
     return view('frontend.iniciosesion');
 });
 
-Route::get('/comercializacion', function () {
-    return view('frontend.comercializacion');
-});
 
-
+Route::post('/carrito/agregar/{tipo}/{id}', [CarritoController::class, 'agregar']);
+Route::get('/carrito/eliminar/{clave}', [CarritoController::class, 'eliminar']);
+Route::get('/finalizar-compra', [CarritoController::class, 'finalizar']);
+Route::get('/catalogo/{tipo}', [CatalogoController::class, 'categoria']);
 Route::get('/empresa', [EmpresaController::class, 'empresa']);
 Route::post('/contacto', [ContactoController::class, 'procesar']);
 Route::post('/registro', [RegistroController::class, 'registro']);
