@@ -17,6 +17,14 @@ class CatalogoController extends Controller
             'tipo' => $tipo
         ]);
     }
+    public function catalogocompleto()
+{
+    $productos = $this->obtenerProductos();
+
+    return view('frontend.catalogocompleto', [
+        'productos' => $productos
+    ]);
+}
 
     public function obtenerProductos()
     {

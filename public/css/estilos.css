@@ -8,7 +8,7 @@
 }
 
 .navbar .nav-link:hover {
-    color: #d4af37 !important; /* dorado elegante */
+    color: #d4af37 !important; 
 }
 
 .navbar .nav-link::after {
@@ -65,7 +65,7 @@
 
 /* DROPDOWN */
 .dropdown-menu {
-    background-color: #212529; /* mismo tono que navbar bg-dark */
+    background-color: #212529; 
     border: none;
     border-radius: 8px;
     padding: 10px 0;
@@ -146,7 +146,7 @@
 }
 
 .footer h5 {
-    color: #d4af37; /* dorado */
+    color: #d4af37; 
     margin-bottom: 15px;
 }
 
@@ -285,7 +285,7 @@
 
 .icono-comercial:hover {
     transform: scale(1.1);
-    color: #198754; /* bordó elegante */
+    color: #198754; 
 }
 
 
@@ -459,4 +459,25 @@
 .offcanvas-title {
     font-weight: bold;
     letter-spacing: 1px;
+}
+
+.termino-card {
+    border: none;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.titulo-terminos {
+    color: #222; 
+    font-weight: 600;
+    margin-bottom: 15px;
+    border-left: 4px solid #d4af37; 
+    padding-left: 12px;
+}
+
+.termino-card p,
+.termino-card li {
+    line-height: 1.7;
+    color: #555;
 }

@@ -27,10 +27,11 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown">
+                        <a class="nav-link d-flex align-items-center gap-1" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             CATÁLOGO <span class="flecha">▾</span>
                         </a>
                         <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/catalogo">TODOS</a></li>
                             <li><a class="dropdown-item" href="/catalogo/vinos">VINOS</a></li>
                             <li><a class="dropdown-item" href="/catalogo/whiskys">WHISKYS</a></li>
                             <li><a class="dropdown-item" href="/catalogo/otros">OTROS</a></li>
@@ -39,7 +40,7 @@
 
                 </ul>
 
-                <!-- DERECHA -->
+                <!-- DERECHA DEL NAVBAR-->
                 <ul class="navbar-nav ms-auto align-items-center">
 
                     <li class="nav-item">

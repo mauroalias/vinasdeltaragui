@@ -37,14 +37,14 @@
                     <h5 class="text-uppercase">Atención al Cliente</h5>
                     <ul class="list-unstyled">
                         <li>Email: contacto@vinas.com</li>
-                        <li>Tel: +54 379 4123456</li>
+                        <li>Tel: +54 379 4152512</li>
                         <li>Horario: Lun a Sab 9 a 17 hs</li>
                     </ul>
                 </div>
 
             </div>
 
-            <!-- MAPA (DERECHA REAL) -->
+            <!-- MAPA -->
             <div class="col-md-4 mb-4">
 
                 <h5 class="text-uppercase">Ubicación</h5>

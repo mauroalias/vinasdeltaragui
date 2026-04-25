@@ -33,6 +33,7 @@ Route::get('/iniciosesion', function () {
 Route::post('/carrito/agregar/{tipo}/{id}', [CarritoController::class, 'agregar']);
 Route::get('/carrito/eliminar/{clave}', [CarritoController::class, 'eliminar']);
 Route::get('/finalizar-compra', [CarritoController::class, 'finalizar']);
+Route::get('/catalogo', [CatalogoController::class, 'catalogocompleto']);
 Route::get('/catalogo/{tipo}', [CatalogoController::class, 'categoria']);
 Route::get('/empresa', [EmpresaController::class, 'empresa']);
 Route::post('/contacto', [ContactoController::class, 'procesar']);
