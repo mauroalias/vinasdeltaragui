@@ -29,14 +29,23 @@ Route::get('/iniciosesion', function () {
     return view('frontend.iniciosesion');
 });
 
+Route::post('/newsletter', function () {
+    return view('frontend.exito', [
+        'titulo' => 'Suscripción exitosa',
+        'mensaje' => 'Gracias por suscribirte. Te enviaremos novedades y promociones a tu correo.'
+    ]);
+});
 
 Route::post('/carrito/agregar/{tipo}/{id}', [CarritoController::class, 'agregar']);
 Route::get('/carrito/eliminar/{clave}', [CarritoController::class, 'eliminar']);
 Route::get('/finalizar-compra', [CarritoController::class, 'finalizar']);
+
 Route::get('/catalogo', [CatalogoController::class, 'catalogocompleto']);
 Route::get('/catalogo/{tipo}', [CatalogoController::class, 'categoria']);
+
 Route::get('/empresa', [EmpresaController::class, 'empresa']);
+Route::get('/comercializacion', [ComercializacionController::class, 'comercializacion']);
+
 Route::post('/contacto', [ContactoController::class, 'procesar']);
 Route::post('/registro', [RegistroController::class, 'registro']);
 Route::post('/iniciosesion', [InicioSesionController::class, 'iniciosesion']);
-Route::get('/comercializacion', [ComercializacionController::class, 'comercializacion']);

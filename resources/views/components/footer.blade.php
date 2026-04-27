@@ -8,10 +8,11 @@
                 <h5 class="text-uppercase">Newsletter</h5>
                 <p>Suscribite y recibí novedades, ofertas y promociones exclusivas.</p>
 
-                <form>
+                <form action="/newsletter" method="POST">
+                    @csrf
                     <div class="input-group">
-                        <input type="email" class="form-control" placeholder="Ingresa tu email">
-                        <button class="btn btn-warning">Suscribirme</button>
+                        <input type="email" name="email" class="form-control" placeholder="Tu email" required>
+                        <button class="btn btn-warning" type="submit">Suscribirme</button>
                     </div>
                 </form>
 
