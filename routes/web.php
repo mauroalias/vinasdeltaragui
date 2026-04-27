@@ -36,6 +36,12 @@ Route::post('/newsletter', function () {
     ]);
 });
 
+Route::get('/logout', function () {
+    session()->forget('usuario');
+    return redirect('/');
+});
+
+
 Route::post('/carrito/agregar/{tipo}/{id}', [CarritoController::class, 'agregar']);
 Route::get('/carrito/eliminar/{clave}', [CarritoController::class, 'eliminar']);
 Route::get('/finalizar-compra', [CarritoController::class, 'finalizar']);

@@ -33,14 +33,11 @@ class RegistroController extends Controller
             ])->withInput();
         }
 
-        session()->put('usuario', [
-            'nombre' => $request->nombre,
-            'correo' => $request->correo,
-        ]);
+        session()->put('registrado', true);
 
         return view('frontend.exito', [
             'titulo' => 'Registro exitoso',
-            'mensaje' => 'Tu cuenta fue creada correctamente. Ya podés iniciar sesión y realizar compras.'
+            'mensaje' => 'Tu cuenta fue creada correctamente. Ahora debés iniciar sesión para finalizar una compra.'
         ]);
     }
 }

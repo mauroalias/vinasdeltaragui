@@ -8,16 +8,20 @@ class ContactoController extends Controller
 {
     public function procesar(Request $request)
     {
-        $nombre = $request->input('nombre');
-        $email = $request->input('correo');
-        $motivo = $request->input('motivo');
-        $consulta = $request->input('consulta');
+        $request->validate([
+            'nombre' => 'required',
+            'correo' => 'required|email',
+            'consulta' => 'required',
+        ], [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'correo.required' => 'El correo es obligatorio.',
+            'correo.email' => 'Ingresá un correo válido.',
+            'consulta.required' => 'La consulta no puede estar vacía.',
+        ]);
 
-        return view('exito', [
-            'nombre' => $nombre,
-            'email' => $email,
-            'motivo' => $motivo,
-            'consulta' => $consulta
+        return view('frontend.exito', [
+            'titulo' => '¡Consulta enviada!',
+            'mensaje' => 'Gracias por contactarte. Te responderemos a la brevedad.'
         ]);
     }
 }
