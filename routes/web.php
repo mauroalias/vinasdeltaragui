@@ -52,6 +52,6 @@ Route::get('/catalogo/{tipo}', [CatalogoController::class, 'categoria']);
 Route::get('/empresa', [EmpresaController::class, 'empresa']);
 Route::get('/comercializacion', [ComercializacionController::class, 'comercializacion']);
 
-Route::post('/contacto', [ContactoController::class, 'procesar']);
+Route::post('/contacto', [ContactoController::class, 'store_contact']);
 Route::post('/registro', [RegistroController::class, 'registro']);
 Route::post('/iniciosesion', [InicioSesionController::class, 'iniciosesion']);

@@ -8,6 +8,22 @@
             <div class="col-md-7">
                 <form action="/contacto" method="POST" class="border p-4 rounded shadow-sm bg-white h-100">
                     @csrf
+
+                    @if (session('success_message'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session ('success_message')}}
+                     </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     
                     <h4 class="mb-4">Escribí tu mensaje</h4>
 
