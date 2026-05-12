@@ -53,5 +53,5 @@ Route::get('/empresa', [EmpresaController::class, 'empresa']);
 Route::get('/comercializacion', [ComercializacionController::class, 'comercializacion']);
 
 Route::post('/contacto', [ContactoController::class, 'store_contact']);
-Route::post('/registro', [RegistroController::class, 'registro']);
+Route::post('/registro', [RegistroController::class, 'store_registro']);
 Route::post('/iniciosesion', [InicioSesionController::class, 'iniciosesion']);

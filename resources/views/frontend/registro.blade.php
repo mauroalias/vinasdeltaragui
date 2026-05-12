@@ -24,6 +24,22 @@
                 <form action="/registro" method="POST">
                     @csrf
 
+                    @if (session('success_message'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session ('success_message')}}
+                     </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre y apellido</label>
                         <input type="text" name="nombre" id="nombre" class="form-control rounded-3" required>
