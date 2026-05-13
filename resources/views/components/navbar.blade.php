@@ -40,26 +40,32 @@
 
                 </ul>
 
-                <!-- DERECHA DEL NAVBAR-->
+                                <!-- DERECHA DEL NAVBAR-->
                 <ul class="navbar-nav ms-auto align-items-center">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/registro">REGISTRARSE</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="/iniciosesion">INICIAR SESIÓN</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <button class="btn nav-link position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelCarrito">
-                                🛒
-                                <span class="badge bg-danger">
-                                 {{ session('carrito') ? count(session('carrito')) : 0 }}
-                                 </span>
+                    @auth
+                        <li class="nav-item">
+                            <button class="btn nav-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelPerfil">
+                                MI PERFIL
                             </button>
-                        </a>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="/registro">REGISTRARSE</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/iniciosesion">INICIAR SESIÓN</a>
+                        </li>
+                    @endauth
+
+                    <li class="nav-item">
+                        <button class="btn nav-link position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelCarrito">
+                            🛒
+                            <span class="badge bg-danger">
+                                {{ session('carrito') ? count(session('carrito')) : 0 }}
+                            </span>
+                        </button>
                     </li>
 
                 </ul>
@@ -68,3 +74,55 @@
         </div>
     </nav>
 </header>
+
+@auth
+<div class="offcanvas offcanvas-end" tabindex="-1" id="panelPerfil">
+
+    <div class="offcanvas-header">
+
+        <h5 class="offcanvas-title">
+            {{ auth()->user()->rol === 'admin' ? 'Perfil Administrador' : 'Mi Perfil' }}
+        </h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+
+    </div>
+
+    <div class="offcanvas-body">
+
+        <p><strong>Nombre:</strong> {{ auth()->user()->name }}</p>
+
+        <p><strong>Email:</strong> {{ auth()->user()->email }}</p>
+
+        <p><strong>Rol:</strong> {{ auth()->user()->rol }}</p>
+
+        <hr>
+
+        @if(auth()->user()->rol === 'admin')
+
+            <a href="/admin/perfil" class="btn btn-dark w-100 mb-2">
+                Ir al panel admin
+            </a>
+
+        @else
+
+            <a href="/perfil" class="btn btn-dark w-100 mb-2">
+                Ver perfil completo
+            </a>
+
+        @endif
+
+        <form action="{{ route('logout') }}" method="POST">
+
+            @csrf
+
+            <button type="submit" class="btn btn-danger w-100">
+                Cerrar sesión
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+@endauth

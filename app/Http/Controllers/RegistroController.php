@@ -4,30 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\RegistroRequest;
-use App\Models\Registro;
-use Carbon\Carbon;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class RegistroController extends Controller
 {
     public function store_registro(RegistroRequest $request)
     {
-
         $datos = $request->validated();
 
-        $nombre=$datos['nombre'];
-        $email=$datos['correo'];
-        $fecha_nacimiento=$datos['fecha_nacimiento'];
-        $password=$datos['password'];
+        $user = User::create([
+            'name' => $datos['nombre'],
+            'email' => $datos['correo'],
+            'fecha_nacimiento' => $datos['fecha_nacimiento'],
+            'password' => $datos['password'],
+            'rol' => 'cliente',
+        ]);
 
-        Registro::create([
-        'nombre'   => $datos['nombre'],
-        'email'    => $datos['correo'],
-        'fecha_nacimiento'   => $datos['fecha_nacimiento'],
-        'password' => $datos['password'],
-    ]);
+        Auth::login($user);
 
-        return redirect()->back()->with('success_message','¡Usuario registrado!');
+        return redirect('/perfil')->with('success_message', '¡Usuario registrado!');
     }
 }
-
-
