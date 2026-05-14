@@ -56,21 +56,17 @@ class CarritoController extends Controller
 
         return back()->with('carrito_abierto', true);
     }
+
     public function finalizar()
-{
-    if (!session()->has('registrado')) {
-        return redirect('/registro')
-            ->with('mensaje', 'Para finalizar la compra primero debés registrarte.');
-    }
+    {
+        if (!auth()->check()) {
+            return redirect('/iniciosesion')
+                ->with('mensaje', 'Para finalizar la compra primero debés iniciar sesión.');
+        }
 
-    if (!session()->has('usuario')) {
-        return redirect('/iniciosesion')
-            ->with('mensaje', 'Ahora iniciá sesión para continuar con la compra.');
-    }
-
-    return view('frontend.exito', [
-        'titulo' => 'Compra iniciada',
-        'mensaje' => 'Tu pedido fue registrado correctamente. Nos comunicaremos para coordinar el pago y la entrega.'
-    ]);
+        return view('frontend.exito', [
+            'titulo' => 'Compra iniciada',
+            'mensaje' => 'Tu pedido fue registrado correctamente. Nos comunicaremos para coordinar el pago y la entrega.'
+        ]);
     }
 }

@@ -54,4 +54,25 @@ class CatalogoController extends Controller
             ],
         ];
     }
+    public function detalle($tipo, $id)
+{
+    $productos = $this->obtenerProductos();
+
+    if (!isset($productos[$tipo][$id])) {
+        abort(404);
+    }
+
+    $producto = $productos[$tipo][$id];
+
+    $relacionados = collect($productos[$tipo])
+        ->except($id)
+        ->take(8);
+
+    return view('frontend.detalle-producto', [
+        'producto' => $producto,
+        'tipo' => $tipo,
+        'id' => $id,
+        'relacionados' => $relacionados,
+    ]);
+}
 }

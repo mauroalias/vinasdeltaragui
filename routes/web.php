@@ -43,6 +43,8 @@ Route::get('/carrito/eliminar/{clave}', [CarritoController::class, 'eliminar']);
 
 Route::get('/finalizar-compra', [CarritoController::class, 'finalizar']);
 
+Route::get('/catalogo/{tipo}/{id}', [CatalogoController::class, 'detalle']);
+
 Route::get('/catalogo', [CatalogoController::class, 'catalogocompleto']);
 
 Route::get('/catalogo/{tipo}', [CatalogoController::class, 'categoria']);
