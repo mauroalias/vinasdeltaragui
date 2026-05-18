@@ -11,7 +11,11 @@
                 <h3 class="text-center mb-4">
                     Iniciar sesión
                 </h3>
-
+                @if(session('success_message'))
+                 <div class="alert alert-success text-center">
+                 {{ session('success_message') }}
+                </div>
+                @endif
                 <form action="/iniciosesion" method="POST">
 
                     @csrf

@@ -31,12 +31,18 @@ class ContactoRequest extends FormRequest
     }
 
     public function messages()
-    {
-        return [
-            'nombre.required' => 'El nombre es obligatorio.',
-            'correo.required' => 'El correo es obligatorio.',
-            'correo.email' => 'Ingresá un correo válido.',
-            'consulta.required' => 'La consulta no puede estar vacía.',
-        ];
-    }
+{
+    return [
+
+        'nombre.required' => 'El nombre es obligatorio.',
+
+        'correo.required' => 'El correo es obligatorio.',
+        'correo.email' => 'Ingresá un correo válido.',
+
+        'motivo.required' => 'El motivo es obligatorio.',
+
+        'consulta.required' => 'La consulta no puede estar vacía.',
+
+    ];
+}
 }

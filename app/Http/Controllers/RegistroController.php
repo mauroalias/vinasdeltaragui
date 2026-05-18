@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegistroRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class RegistroController extends Controller
 {
@@ -13,16 +13,17 @@ class RegistroController extends Controller
     {
         $datos = $request->validated();
 
-        $user = User::create([
+        User::create([
             'name' => $datos['nombre'],
             'email' => $datos['correo'],
             'fecha_nacimiento' => $datos['fecha_nacimiento'],
-            'password' => $datos['password'],
+            'password' => Hash::make($datos['password']),
             'rol' => 'cliente',
         ]);
 
-        Auth::login($user);
-
-        return redirect('/perfil')->with('success_message', '¡Usuario registrado!');
+        return redirect('/iniciosesion')->with(
+            'success_message',
+            '¡Usuario registrado correctamente! Ahora iniciá sesión.'
+        );
     }
 }

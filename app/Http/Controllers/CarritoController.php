@@ -3,41 +3,44 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\CatalogoController;
+use App\Models\Producto;
 
 class CarritoController extends Controller
 {
     public function agregar(Request $request, $tipo, $id)
     {
-        $catalogo = new CatalogoController();
-        $productos = $catalogo->obtenerProductos();
+        $producto = Producto::where('id', $id)
+            ->where('activo', true)
+            ->firstOrFail();
 
-        if (!isset($productos[$tipo][$id])) {
-            abort(404);
-        }
-
-        $producto = $productos[$tipo][$id];
         $cantidad = (int) $request->input('cantidad', 1);
 
         if ($cantidad < 1) {
             $cantidad = 1;
         }
 
-        if ($cantidad > $producto['stock']) {
-            $cantidad = $producto['stock'];
+        if ($cantidad > $producto->stock) {
+            $cantidad = $producto->stock;
         }
 
         $carrito = session()->get('carrito', []);
-        $clave = $tipo . '-' . $id;
+
+        $clave = $producto->id;
 
         if (isset($carrito[$clave])) {
             $carrito[$clave]['cantidad'] += $cantidad;
+
+            if ($carrito[$clave]['cantidad'] > $producto->stock) {
+                $carrito[$clave]['cantidad'] = $producto->stock;
+            }
         } else {
             $carrito[$clave] = [
-                'nombre' => $producto['nombre'],
-                'precio' => $producto['precio'],
+                'id' => $producto->id,
+                'nombre' => $producto->nombre,
+                'precio' => $producto->precio,
                 'cantidad' => $cantidad,
-                'imagen' => $producto['imagen'],
+                'imagen' => $producto->url_imagen,
+                'tipo' => $tipo,
             ];
         }
 
@@ -63,6 +66,8 @@ class CarritoController extends Controller
             return redirect('/iniciosesion')
                 ->with('mensaje', 'Para finalizar la compra primero debés iniciar sesión.');
         }
+
+        session()->forget('carrito');
 
         return view('frontend.exito', [
             'titulo' => 'Compra iniciada',

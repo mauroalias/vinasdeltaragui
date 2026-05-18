@@ -1,45 +1,40 @@
-<x-layout title="{{ $producto['nombre'] }}">
+<x-layout title="{{ $producto->nombre }}">
 
 <div class="container my-5">
 
-    {{-- DETALLE PRINCIPAL --}}
     <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-5">
 
         <div class="row g-0 align-items-center">
 
-            <div class="col-lg-6 bg-light text-center p-5">
-
+            <div class="col-lg-6 bg-light text-center p-5 producto-detalle-contenedor">
                 <img
-                    src="{{ asset('img/' . $producto['imagen']) }}"
-                    alt="{{ $producto['nombre'] }}"
+                    src="{{ asset('img/' . $producto->url_imagen) }}"
+                    alt="{{ $producto->nombre }}"
                     class="img-fluid producto-detalle-img"
                 >
-
             </div>
 
             <div class="col-lg-6 p-5">
 
-                <div class="mb-3">
-                    <small class="text-uppercase text-muted">
-                        Inicio / Catálogo / {{ ucfirst($tipo) }}
-                    </small>
-                </div>
+                <small class="text-uppercase text-muted">
+                    Inicio / Catálogo / {{ ucfirst($tipo) }}
+                </small>
 
-                <h1 class="fw-bold mb-3 producto-detalle-titulo">
-                    {{ $producto['nombre'] }}
+                <h1 class="fw-bold mt-3 mb-3 producto-detalle-titulo">
+                    {{ $producto->nombre }}
                 </h1>
 
                 <p class="lead text-muted mb-4">
-                    {{ $producto['descripcion'] }}
+                    {{ $producto->descripcion }}
                 </p>
 
                 <h2 class="fw-bold mb-3">
-                    ${{ number_format($producto['precio'], 0, ',', '.') }}
+                    ${{ number_format($producto->precio, 0, ',', '.') }}
                 </h2>
 
-                @if($producto['stock'] > 0)
+                @if($producto->stock > 0)
                     <p class="text-success fw-bold mb-4">
-                        {{ $producto['stock'] }} unidades disponibles
+                        {{ $producto->stock }} unidades disponibles
                     </p>
                 @else
                     <p class="text-danger fw-bold mb-4">
@@ -50,34 +45,26 @@
                 <hr>
 
                 <div class="mb-4">
-                    <p class="mb-1">
-                        <strong>Categoría:</strong> {{ ucfirst($tipo) }}
-                    </p>
-
-                    <p class="mb-1">
-                        <strong>Estado:</strong>
-                        {{ $producto['stock'] > 0 ? 'Disponible para compra' : 'No disponible' }}
-                    </p>
-
-                    <p class="mb-1">
-                        <strong>Origen:</strong> Selección premium Viñas del Taragüí
-                    </p>
+                    <p class="mb-1"><strong>Categoría:</strong> {{ ucfirst($tipo) }}</p>
+                    <p class="mb-1"><strong>Estado:</strong> {{ $producto->stock > 0 ? 'Disponible para compra' : 'No disponible' }}</p>
+                    <p class="mb-1"><strong>Origen:</strong> {{ $producto->origen ?? 'No especificado' }}</p>
+                    <p class="mb-1"><strong>Bodega / Marca:</strong> {{ $producto->bodega ?? 'No especificado' }}</p>
+                    <p class="mb-1"><strong>Graduación:</strong> {{ $producto->graduacion ?? 'No especificado' }}</p>
+                    <p class="mb-1"><strong>Contenido:</strong> {{ $producto->volumen ?? 'No especificado' }}</p>
+                    <p class="mb-1"><strong>Tipo:</strong> {{ $producto->variedad ?? 'No especificado' }}</p>
                 </div>
 
-                @if($producto['stock'] > 0)
-
-                    <form action="/carrito/agregar/{{ $tipo }}/{{ $id }}" method="POST">
-
+                @if($producto->stock > 0)
+                    <form action="/carrito/agregar/{{ $tipo }}/{{ $producto->id }}" method="POST">
                         @csrf
 
                         <div class="d-flex align-items-center gap-3 mb-4">
-
                             <input
                                 type="number"
                                 name="cantidad"
                                 value="1"
                                 min="1"
-                                max="{{ $producto['stock'] }}"
+                                max="{{ $producto->stock }}"
                                 class="form-control text-center"
                                 style="width: 100px;"
                             >
@@ -85,17 +72,12 @@
                             <button type="submit" class="btn btn-dark btn-lg px-4">
                                 🛒 Añadir al carrito
                             </button>
-
                         </div>
-
                     </form>
-
                 @else
-
                     <button class="btn btn-secondary btn-lg" disabled>
                         No disponible
                     </button>
-
                 @endif
 
             </div>
@@ -104,7 +86,6 @@
 
     </div>
 
-    {{-- DESCRIPCIÓN EXTRA --}}
     <div class="row mb-5">
 
         <div class="col-md-4 mb-3">
@@ -136,17 +117,12 @@
 
     </div>
 
-    {{-- RELACIONADOS --}}
     <div class="mb-4 d-flex justify-content-between align-items-center">
-
-        <h2 class="fw-bold">
-            Productos relacionados
-        </h2>
+        <h2 class="fw-bold">Productos relacionados</h2>
 
         <a href="/catalogo/{{ $tipo }}" class="btn btn-outline-dark rounded-pill">
             Ver todos
         </a>
-
     </div>
 
     <div id="sliderRelacionados" class="carousel slide" data-bs-ride="carousel">
@@ -159,18 +135,18 @@
 
                     <div class="row">
 
-                        @foreach($grupo as $relacionadoId => $relacionado)
+                        @foreach($grupo as $relacionado)
 
                             <div class="col-md-3 mb-4">
 
                                 <div class="card h-100 border-0 shadow-sm rounded-4 producto-relacionado">
 
-                                    <a href="/catalogo/{{ $tipo }}/{{ $relacionadoId }}" class="text-decoration-none text-dark">
+                                    <a href="/catalogo/{{ $tipo }}/{{ $relacionado->id }}" class="text-decoration-none text-dark">
 
                                         <div class="bg-light text-center p-4 rounded-top-4">
                                             <img
-                                                src="{{ asset('img/' . $relacionado['imagen']) }}"
-                                                alt="{{ $relacionado['nombre'] }}"
+                                                src="{{ asset('img/' . $relacionado->url_imagen) }}"
+                                                alt="{{ $relacionado->nombre }}"
                                                 class="img-fluid"
                                                 style="height: 220px; object-fit: contain;"
                                             >
@@ -183,11 +159,11 @@
                                             </small>
 
                                             <h6 class="fw-bold mt-2">
-                                                {{ $relacionado['nombre'] }}
+                                                {{ $relacionado->nombre }}
                                             </h6>
 
                                             <p class="fw-bold mb-2">
-                                                ${{ number_format($relacionado['precio'], 0, ',', '.') }}
+                                                ${{ number_format($relacionado->precio, 0, ',', '.') }}
                                             </p>
 
                                         </div>
@@ -196,10 +172,9 @@
 
                                     <div class="card-footer bg-white border-0 pb-3">
 
-                                        @if($relacionado['stock'] > 0)
+                                        @if($relacionado->stock > 0)
 
-                                            <form action="/carrito/agregar/{{ $tipo }}/{{ $relacionadoId }}" method="POST">
-
+                                            <form action="/carrito/agregar/{{ $tipo }}/{{ $relacionado->id }}" method="POST">
                                                 @csrf
 
                                                 <input type="hidden" name="cantidad" value="1">
@@ -207,7 +182,6 @@
                                                 <button class="btn btn-success w-100 rounded-3">
                                                     Añadir al carrito
                                                 </button>
-
                                             </form>
 
                                         @else
@@ -260,38 +234,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endif
-
-<style>
-    .producto-detalle-img {
-        max-height: 560px;
-        object-fit: contain;
-        transition: transform .3s ease;
-    }
-
-    .producto-detalle-img:hover {
-        transform: scale(1.04);
-    }
-
-    .producto-detalle-titulo {
-        letter-spacing: .5px;
-    }
-
-    .producto-relacionado {
-        transition: transform .25s ease, box-shadow .25s ease;
-    }
-
-    .producto-relacionado:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 1rem 2rem rgba(0,0,0,.12) !important;
-    }
-
-    .carousel-control-prev {
-        left: -50px;
-    }
-
-    .carousel-control-next {
-        right: -50px;
-    }
-</style>
 
 </x-layout>

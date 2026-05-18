@@ -6,105 +6,111 @@
         <h2>CATÁLOGO COMPLETO</h2>
     </div>
 
-    <div class="row">
+    @foreach($categorias as $categoria)
 
-        @foreach($productos as $categoria => $items)
+        <div class="mb-5">
 
-            @foreach($items as $index => $producto)
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold">
+                    {{ strtoupper($categoria->nombre) }}
+                </h3>
 
-                <div class="col-md-4 mb-4">
+                <a href="/catalogo/{{ $categoria->slug }}" class="btn btn-outline-dark rounded-pill">
+                    Ver todos
+                </a>
+            </div>
 
-                    <div class="card h-100 sombra-hover catalogo-card">
+            <div class="row">
 
-                        <div class="contenedor-img">
+                @forelse($categoria->productos as $producto)
 
-                            <a href="/catalogo/{{ $categoria }}/{{ $index }}">
-                                <img src="{{ asset('img/' . $producto['imagen']) }}" alt="{{ $producto['nombre'] }}">
-                            </a>
+                    <div class="col-md-4 mb-4">
 
-                        </div>
+                        <div class="card h-100 sombra-hover catalogo-card">
 
-                        <div class="card-body text-center">
+                            <div class="contenedor-img">
+                                <a href="/catalogo/{{ $categoria->slug }}/{{ $producto->id }}">
+                                    <img src="{{ asset('img/' . $producto->url_imagen) }}" alt="{{ $producto->nombre }}">
+                                </a>
+                            </div>
 
-                            <a href="/catalogo/{{ $categoria }}/{{ $index }}" class="text-decoration-none text-dark">
+                            <div class="card-body text-center">
 
-                                <h5 class="card-title">
-                                    {{ $producto['nombre'] }}
-                                </h5>
+                                <a href="/catalogo/{{ $categoria->slug }}/{{ $producto->id }}" class="text-decoration-none text-dark">
+                                    <h5 class="card-title">
+                                        {{ $producto->nombre }}
+                                    </h5>
+                                </a>
 
-                            </a>
-
-                            <p class="card-text">
-                                {{ $producto['descripcion'] }}
-                            </p>
-
-                            <p class="fw-bold mb-2">
-                                ${{ number_format($producto['precio'],0,',','.') }}
-                            </p>
-
-                            @if($producto['stock'] > 0)
-
-                                <p class="text-success fw-bold">
-                                    STOCK: {{ $producto['stock'] }}
+                                <p class="card-text">
+                                    {{ $producto->descripcion }}
                                 </p>
 
-                                <form action="/carrito/agregar/{{ $categoria }}/{{ $index }}" method="POST">
+                                <p class="fw-bold mb-2">
+                                    ${{ number_format($producto->precio, 0, ',', '.') }}
+                                </p>
 
-                                    @csrf
+                                @if($producto->stock > 0)
 
-                                    <div class="cantidad-box mb-3">
+                                    <p class="text-success fw-bold">
+                                        STOCK: {{ $producto->stock }}
+                                    </p>
 
-                                        <button type="button"
-                                                class="btn-cantidad"
-                                                onclick="this.nextElementSibling.stepDown()">
-                                            −
+                                    <form action="/carrito/agregar/{{ $categoria->slug }}/{{ $producto->id }}" method="POST">
+                                        @csrf
+
+                                        <div class="cantidad-box mb-3">
+                                            <button type="button" class="btn-cantidad" onclick="this.nextElementSibling.stepDown()">−</button>
+
+                                            <input
+                                                type="number"
+                                                name="cantidad"
+                                                value="1"
+                                                min="1"
+                                                max="{{ $producto->stock }}"
+                                            >
+
+                                            <button type="button" class="btn-cantidad" onclick="this.previousElementSibling.stepUp()">+</button>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success w-100">
+                                            🛒 COMPRAR
                                         </button>
+                                    </form>
 
-                                        <input
-                                            type="number"
-                                            name="cantidad"
-                                            value="1"
-                                            min="1"
-                                            max="{{ $producto['stock'] }}"
-                                        >
+                                @else
 
-                                        <button type="button"
-                                                class="btn-cantidad"
-                                                onclick="this.previousElementSibling.stepUp()">
-                                            +
-                                        </button>
+                                    <p class="text-danger fw-bold">
+                                        SIN STOCK
+                                    </p>
 
-                                    </div>
-
-                                    <button type="submit" class="btn btn-success w-100">
-                                        🛒 COMPRAR
+                                    <button class="btn btn-secondary w-100" disabled>
+                                        NO DISPONIBLE
                                     </button>
 
-                                </form>
+                                @endif
 
-                            @else
-
-                                <p class="text-danger fw-bold">
-                                    SIN STOCK
-                                </p>
-
-                                <button class="btn btn-secondary w-100" disabled>
-                                    NO DISPONIBLE
-                                </button>
-
-                            @endif
+                            </div>
 
                         </div>
 
                     </div>
 
-                </div>
+                @empty
 
-            @endforeach
+                    <div class="col-12">
+                        <div class="alert alert-warning text-center">
+                            No hay productos disponibles en esta categoría.
+                        </div>
+                    </div>
 
-        @endforeach
+                @endforelse
 
-    </div>
+            </div>
+
+        </div>
+
+    @endforeach
 
 </div>
 
@@ -113,13 +119,8 @@
 @if(session('carrito_abierto'))
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
-    let carrito = new bootstrap.Offcanvas(
-        document.getElementById('panelCarrito')
-    );
-
+    let carrito = new bootstrap.Offcanvas(document.getElementById('panelCarrito'));
     carrito.show();
-
 });
 </script>
 @endif

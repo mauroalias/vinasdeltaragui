@@ -7,11 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     protected $fillable = [
+        'categoria_id',
         'nombre',
         'descripcion',
         'precio',
         'stock',
         'url_imagen',
+        'origen',
+        'bodega',
+        'graduacion',
+        'volumen',
+        'variedad',
         'activo',
     ];
 
@@ -20,5 +26,9 @@ class Producto extends Model
         'stock' => 'integer',
         'activo' => 'boolean',
     ];
-    
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
+    }
 }
