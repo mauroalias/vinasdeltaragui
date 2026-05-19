@@ -33,7 +33,7 @@ class InicioSesionController extends Controller
         $request->session()->regenerate();
 
         if (Auth::user()->rol === 'admin') {
-            return redirect('/admin/perfil');
+         return redirect('/admin');
         }
 
         return redirect('/perfil');

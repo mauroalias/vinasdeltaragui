@@ -100,8 +100,8 @@
 
         @if(auth()->user()->rol === 'admin')
 
-            <a href="/admin/perfil" class="btn btn-dark w-100 mb-2">
-                Ir al panel admin
+            <a href="/admin" class="btn btn-dark w-100 mb-2">
+                Panel administrador
             </a>
 
         @else

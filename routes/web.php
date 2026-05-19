@@ -8,6 +8,7 @@ use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\InicioSesionController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\CarritoController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('frontend.inicio');
@@ -35,6 +36,14 @@ Route::post('/newsletter', function () {
         'titulo' => 'Suscripción exitosa',
         'mensaje' => 'Gracias por suscribirte. Te enviaremos novedades y promociones a tu correo.'
     ]);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin', [AdminController::class, 'dashboard']);
+    Route::get('/admin/productos', [AdminController::class, 'productos']);
+    Route::get('/admin/productos/crear', [AdminController::class, 'crearProducto']);
+    Route::post('/admin/productos', [AdminController::class, 'guardarProducto']);
+    Route::get('/admin/contactos', [AdminController::class, 'contactos']);
 });
 
 Route::post('/carrito/agregar/{tipo}/{id}', [CarritoController::class, 'agregar']);
@@ -68,12 +77,3 @@ Route::get('/perfil', function () {
 
 })->middleware('auth');
 
-Route::get('/admin/perfil', function () {
-
-    if (auth()->user()->rol !== 'admin') {
-        abort(403);
-    }
-
-    return view('frontend.admin-perfil');
-
-})->middleware('auth');
