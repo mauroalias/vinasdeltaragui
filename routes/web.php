@@ -10,6 +10,10 @@ use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\AdminController;
 
+/*
+Frontend
+*/
+
 Route::get('/', function () {
     return view('frontend.inicio');
 });
@@ -36,40 +40,8 @@ Route::post('/newsletter', function () {
         'titulo' => 'Suscripción exitosa',
         'mensaje' => 'Gracias por suscribirte. Te enviaremos novedades y promociones a tu correo.'
     ]);
+
 });
-
-Route::middleware('auth')->group(function () {
-    Route::get('/admin', [AdminController::class, 'dashboard']);
-    Route::get('/admin/productos', [AdminController::class, 'productos']);
-    Route::get('/admin/productos/crear', [AdminController::class, 'crearProducto']);
-    Route::post('/admin/productos', [AdminController::class, 'guardarProducto']);
-    Route::get('/admin/contactos', [AdminController::class, 'contactos']);
-});
-
-Route::post('/carrito/agregar/{tipo}/{id}', [CarritoController::class, 'agregar']);
-
-Route::get('/carrito/eliminar/{clave}', [CarritoController::class, 'eliminar']);
-
-Route::get('/finalizar-compra', [CarritoController::class, 'finalizar']);
-
-Route::get('/catalogo/{tipo}/{id}', [CatalogoController::class, 'detalle']);
-
-Route::get('/catalogo', [CatalogoController::class, 'catalogocompleto']);
-
-Route::get('/catalogo/{tipo}', [CatalogoController::class, 'categoria']);
-
-Route::get('/empresa', [EmpresaController::class, 'empresa']);
-
-Route::get('/comercializacion', [ComercializacionController::class, 'comercializacion']);
-
-Route::post('/contacto', [ContactoController::class, 'store_contact']);
-
-Route::post('/registro', [RegistroController::class, 'store_registro']);
-
-Route::post('/iniciosesion', [InicioSesionController::class, 'iniciosesion']);
-
-Route::post('/logout', [InicioSesionController::class, 'logout'])
-    ->name('logout');
 
 Route::get('/perfil', function () {
 
@@ -77,3 +49,87 @@ Route::get('/perfil', function () {
 
 })->middleware('auth');
 
+
+/*
+Admin
+*/
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/admin', [AdminController::class, 'dashboard']);
+
+    Route::get('/admin/productos', [AdminController::class, 'productos']);
+
+    Route::get('/admin/productos/crear', [AdminController::class, 'crearProducto']);
+
+    Route::post('/admin/productos', [AdminController::class, 'guardarProducto']);
+
+    Route::get('/admin/contactos', [AdminController::class, 'contactos']);
+
+    // Baja lógica productos
+
+   Route::get('/admin/productos/baja',
+    [AdminController::class, 'vistaBajaProducto'])
+    ->name('admin.productos.baja');
+
+Route::put('/admin/productos/baja',
+    [AdminController::class, 'darDeBajaProducto'])
+    ->name('admin.productos.darBaja');
+});
+
+
+/*
+Carrito
+*/
+
+Route::post('/carrito/agregar/{tipo}/{id}',
+    [CarritoController::class, 'agregar']);
+
+Route::get('/carrito/eliminar/{clave}',
+    [CarritoController::class, 'eliminar']);
+
+Route::get('/finalizar-compra',
+    [CarritoController::class, 'finalizar']);
+
+
+/*
+Catálogo
+*/
+
+Route::get('/catalogo',
+    [CatalogoController::class, 'catalogocompleto']);
+
+Route::get('/catalogo/{tipo}',
+    [CatalogoController::class, 'categoria']);
+
+Route::get('/catalogo/{tipo}/{id}',
+    [CatalogoController::class, 'detalle']);
+
+
+/*
+Empresa
+*/
+
+Route::get('/empresa',
+    [EmpresaController::class, 'empresa']);
+
+Route::get('/comercializacion',
+    [ComercializacionController::class, 'comercializacion']);
+
+
+/*
+Formularios
+*/
+
+Route::post('/contacto',
+    [ContactoController::class, 'store_contact']);
+
+Route::post('/registro',
+    [RegistroController::class, 'store_registro']);
+
+Route::post('/iniciosesion',
+    [InicioSesionController::class, 'iniciosesion']);
+
+Route::post('/logout',
+    [InicioSesionController::class, 'logout'])
+    ->name('logout');
