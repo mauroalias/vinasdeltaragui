@@ -9,6 +9,7 @@ use App\Http\Controllers\InicioSesionController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PerfilController;
 
 Route::get('/', function () {
     return view('frontend.inicio');
@@ -76,4 +77,6 @@ Route::get('/perfil', function () {
     return view('frontend.perfil');
 
 })->middleware('auth');
+
+Route::put('/perfil/password', [PerfilController::class, 'actualizarPassword'])->name('profile.update.password')->middleware('auth');
 
