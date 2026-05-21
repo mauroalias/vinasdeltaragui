@@ -34,17 +34,45 @@
                         </a>
                     </li>
 
-                    <li class="nav-item d-flex align-items-center">
-                        <a class="nav-link d-flex align-items-center" href="/admin/productos">
-                            PRODUCTOS
-                        </a>
-                    </li>
+    <li class="nav-item dropdown">
 
-                    <li class="nav-item d-flex align-items-center">
-                        <a class="nav-link d-flex align-items-center" href="/admin/productos/crear">
-                            REGISTRAR PRODUCTO
-                        </a>
-                    </li>
+    <a class="nav-link dropdown-toggle"
+       href="#"
+       id="productosDropdown"
+       role="button"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
+        PRODUCTOS
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-dark">
+
+        <li>
+            <a class="dropdown-item"
+               href="/admin/productos">
+                VER PRODUCTOS
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item"
+               href="/admin/productos/crear">
+                REGISTRAR PRODUCTO
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item"
+               href="/admin/productos/baja">
+
+                DAR DE BAJA UN PRODUCTO
+
+            </a>
+        </li>
+
+    </ul>
+
+</li>
 
                     <li class="nav-item d-flex align-items-center">
                         <a class="nav-link d-flex align-items-center" href="/admin/contactos">

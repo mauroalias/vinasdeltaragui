@@ -23,7 +23,7 @@ class AdminController extends Controller
 
         return view('backend.admin.dashboard', [
             'totalUsuarios' => User::count(),
-            'totalProductos' => Producto::count(),
+            'totalProductos' => Producto::where('activo', 1)->count(),
             'totalContactos' => Contacto::count(),
         ]);
     }
@@ -33,7 +33,9 @@ class AdminController extends Controller
         $this->verificarAdmin();
 
         return view('backend.admin.productos', [
-            'productos' => Producto::with('categoria')->get(),
+            'productos' => Producto::with('categoria')
+                ->where('activo', 1)
+                ->get(),
         ]);
     }
 
@@ -66,7 +68,11 @@ class AdminController extends Controller
 
         Producto::create($datos);
 
-        return redirect('/admin/productos')->with('success_message', 'Producto registrado correctamente.');
+        return redirect('/admin/productos')
+            ->with(
+                'success_message',
+                'Producto registrado correctamente.'
+            );
     }
 
     public function contactos()
@@ -76,5 +82,41 @@ class AdminController extends Controller
         return view('backend.admin.contactos', [
             'contactos' => Contacto::latest()->get(),
         ]);
+    }
+
+    public function vistaBajaProducto()
+{
+    $this->verificarAdmin();
+
+    $productos = Producto::where('activo',1)
+                    ->orderBy('id')
+                    ->get();
+
+    return view(
+        'backend.admin.baja-productos',
+        compact('productos')
+    );
+}
+
+    public function darDeBajaProducto(Request $request)
+    {
+        $this->verificarAdmin();
+
+        $request->validate([
+            'id' => 'required|exists:productos,id',
+        ]);
+
+        $producto = Producto::findOrFail($request->id);
+
+        $producto->activo = 0;
+
+        $producto->save();
+
+        return redirect()
+            ->back()
+            ->with(
+                'success',
+                'Producto dado de baja correctamente'
+            );
     }
 }
