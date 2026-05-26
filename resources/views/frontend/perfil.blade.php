@@ -134,7 +134,7 @@
     </div>
 
 </div>
-//modificar contraseña
+
 <div class="modal fade" id="modalModificarContrasena" tabindex="-1" aria-labelledby="modalModificarContrasenaLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">

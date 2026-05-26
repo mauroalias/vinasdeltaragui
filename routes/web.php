@@ -9,6 +9,7 @@ use App\Http\Controllers\InicioSesionController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PerfilController;
 
 /*
 Frontend
@@ -48,6 +49,10 @@ Route::get('/perfil', function () {
     return view('frontend.perfil');
 
 })->middleware('auth');
+
+Route::put('/perfil/password', [PerfilController::class, 'actualizarPassword'])
+    ->middleware('auth')
+    ->name('profile.update.password');
 
 
 /*
@@ -127,6 +132,17 @@ Route::get('/carrito/eliminar/{clave}',
 Route::get('/finalizar-compra',
     [CarritoController::class, 'finalizar']);
 
+Route::post('/procesar-compra',
+    [CarritoController::class, 'procesarCompra']);
+
+Route::get('/carrito/sumar/{clave}',
+    [CarritoController::class, 'sumar']);
+
+Route::get('/carrito/restar/{clave}',
+    [CarritoController::class, 'restar']);
+
+Route::get('/compra-exitosa',
+    [CarritoController::class, 'exito']);
 
 /*
 Catálogo

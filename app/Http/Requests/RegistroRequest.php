@@ -19,7 +19,7 @@ class RegistroRequest extends FormRequest
 
             'correo' => 'required|email|unique:users,email',
 
-            'fecha_nacimiento' => 'required|date',
+            'fecha_nacimiento' => 'required|date|before_or_equal:' . now()->subYears(18)->format('Y-m-d'),
 
             'password' => 'required|min:8|confirmed',
 
@@ -39,6 +39,8 @@ class RegistroRequest extends FormRequest
             'correo.unique' => 'Ese correo ya está registrado.',
 
             'fecha_nacimiento.required' => 'La fecha de nacimiento es obligatoria.',
+
+            'fecha_nacimiento.before_or_equal' => 'Debes ser mayor de 18 años.',
 
             'password.required' => 'La contraseña es obligatoria.',
 

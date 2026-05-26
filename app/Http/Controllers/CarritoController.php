@@ -67,11 +67,65 @@ class CarritoController extends Controller
                 ->with('mensaje', 'Para finalizar la compra primero debés iniciar sesión.');
         }
 
+        $carrito = session('carrito', []);
+
+        $subtotal = 0;
+        foreach ($carrito as $item) {
+            $subtotal += $item['precio'] * $item['cantidad'];
+        }
+
+        $total = $subtotal;
+
+        return view('frontend.finalizar-compra', compact('carrito', 'subtotal', 'total'));
+    }
+
+    public function procesarCompra(Request $request)
+    {
+        // Acá a futuro guardarías el pedido en la base de datos (tabla pedidos)
+        
+        // Como la compra ya se confirmó, AHORA SÍ vaciamos el carrito
+        session()->forget('carrito');
+
+       return redirect('/compra-exitosa');
+    }
+
+    public function sumar($clave)
+    {
+        $carrito = session()->get('carrito', []);
+        
+        if (isset($carrito[$clave])) {
+            $carrito[$clave]['cantidad']++;
+            session()->put('carrito', $carrito);
+        }
+        
+        return back();
+    }
+
+    public function restar($clave)
+    {
+        $carrito = session()->get('carrito', []);
+        
+        if (isset($carrito[$clave])) {
+            if ($carrito[$clave]['cantidad'] > 1) {
+                $carrito[$clave]['cantidad']--;
+            } else {
+                // Si la cantidad llega a 0, directamente lo sacamos del carrito
+                unset($carrito[$clave]);
+            }
+            session()->put('carrito', $carrito);
+        }
+        
+        return back();
+    }
+
+    public function exito()
+    {
+        
         session()->forget('carrito');
 
         return view('frontend.exito', [
-            'titulo' => 'Compra iniciada',
-            'mensaje' => 'Tu pedido fue registrado correctamente. Nos comunicaremos para coordinar el pago y la entrega.'
+            'titulo' => '¡Pedido Confirmado!',
+            'mensaje' => 'Tu pedido fue registrado y pagado correctamente. Nos comunicaremos para coordinar la entrega.'
         ]);
-    }
+}
 }
