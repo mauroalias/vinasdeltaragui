@@ -9,7 +9,6 @@ use App\Http\Controllers\InicioSesionController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\PerfilController;
 
 /*
 Frontend
@@ -50,8 +49,10 @@ Route::get('/perfil', function () {
 
 })->middleware('auth');
 
-Route::put('/perfil/password', [PerfilController::class, 'actualizarPassword'])->name('profile.update.password')->middleware('auth');
 
+/*
+Admin
+*/
 
 /*
 Admin
@@ -59,25 +60,57 @@ Admin
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/admin', [AdminController::class, 'dashboard']);
+    // DASHBOARD
+    Route::get(
+        '/admin',
+        [AdminController::class, 'dashboard']
+    );
 
-    Route::get('/admin/productos', [AdminController::class, 'productos']);
+    // LISTAR PRODUCTOS
+    Route::get(
+        '/admin/productos',
+        [AdminController::class, 'productos']
+    );
 
-    Route::get('/admin/productos/crear', [AdminController::class, 'crearProducto']);
+    // CREAR PRODUCTO
+    Route::get(
+        '/admin/productos/crear',
+        [AdminController::class, 'crearProducto']
+    );
 
-    Route::post('/admin/productos', [AdminController::class, 'guardarProducto']);
+    Route::post(
+        '/admin/productos',
+        [AdminController::class, 'guardarProducto']
+    );
 
-    Route::get('/admin/contactos', [AdminController::class, 'contactos']);
+    // EDITAR PRODUCTO
+    Route::get(
+        '/admin/productos/{id}/editar',
+        [AdminController::class, 'editarProducto']
+    );
 
-    // Baja lógica productos
+    Route::put(
+        '/admin/productos/{id}',
+        [AdminController::class, 'actualizarProducto']
+    );
 
-   Route::get('/admin/productos/baja',
-    [AdminController::class, 'vistaBajaProducto'])
-    ->name('admin.productos.baja');
+    // BAJA LÓGICA
+    Route::get(
+    '/admin/productos/baja',
+    [AdminController::class, 'vistaBajaProducto']
+    )->name('admin.productos.baja');
 
-Route::put('/admin/productos/baja',
-    [AdminController::class, 'darDeBajaProducto'])
-    ->name('admin.productos.darBaja');
+    Route::post(
+    '/admin/productos/baja',
+    [AdminController::class, 'darDeBajaProducto']
+    )->name('admin.productos.darBaja');
+
+    // CONTACTOS
+    Route::get(
+        '/admin/contactos',
+        [AdminController::class, 'contactos']
+    );
+
 });
 
 
@@ -133,6 +166,17 @@ Route::post('/registro',
 Route::post('/iniciosesion',
     [InicioSesionController::class, 'iniciosesion']);
 
+Route::get('/login', function () {
+    return redirect('/iniciosesion');
+})->name('login');
+
 Route::post('/logout',
     [InicioSesionController::class, 'logout'])
     ->name('logout');
+
+Route::post(
+    '/admin/productos/reactivar',
+    [AdminController::class, 'reactivarProducto']
+);
+
+//Route::resource('productos',ProductoController::class );

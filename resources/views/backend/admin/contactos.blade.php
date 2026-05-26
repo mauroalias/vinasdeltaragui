@@ -1,69 +1,120 @@
 <x-admin-layout title="Panel Administrador">
 
-<div class="container my-5">
+<div class="container py-5">
 
-<h1 class="mb-4">
+    <div class="mb-5 text-center">
 
-Consultas recibidas
+        <h1 class="fw-bold">
+            Consultas
+        </h1>
 
-</h1>
+        <p class="text-muted mb-0">
+            Visualizá las consultas enviadas por los usuarios
+        </p>
 
-<div class="card shadow border-0">
+    </div>
 
-<table class="table">
+    @if($contactos->count() > 0)
 
-<thead class="table-dark">
+    <div class="card shadow border-0 rounded-4 overflow-hidden">
 
-<tr>
+        <div class="card-header bg-dark text-white py-3">
 
-<th>Nombre</th>
-<th>Email</th>
-<th>Motivo</th>
-<th>Consulta</th>
+            <h5 class="mb-0">
+                Consultas recibidas
+            </h5>
 
-</tr>
+        </div>
 
-</thead>
+        <div class="table-responsive">
 
-<tbody>
+            <table class="table align-middle mb-0">
 
-@foreach($contactos as $contacto)
+                <thead class="table-light">
 
-<tr>
+                    <tr>
 
-<td>
+                        <th>Nombre</th>
 
-{{ $contacto->nombre }}
+                        <th>Email</th>
 
-</td>
+                        <th>Motivo</th>
 
-<td>
+                        <th>Consulta</th>
 
-{{ $contacto->email }}
+                    </tr>
 
-</td>
+                </thead>
 
-<td>
+                <tbody>
 
-{{ $contacto->motivo }}
+                    @foreach($contactos as $contacto)
 
-</td>
+                    <tr>
 
-<td>
+                        <td class="fw-semibold">
 
-{{ $contacto->consulta }}
+                            {{ $contacto->nombre }}
 
-</td>
+                        </td>
 
-</tr>
+                        <td>
 
-@endforeach
+                            {{ $contacto->email }}
 
-</tbody>
+                        </td>
 
-</table>
+                        <td>
 
-</div>
+                            <span class="badge bg-primary rounded-pill px-3 py-2">
+
+                                {{ $contacto->motivo }}
+
+                            </span>
+
+                        </td>
+
+                        <td style="max-width: 350px;">
+
+                            <div class="text-muted">
+
+                                {{ $contacto->consulta }}
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    @endforeach
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    @else
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-body text-center py-5">
+
+            <h4 class="mb-3">
+                No hay consultas registradas
+            </h4>
+
+            <p class="text-muted mb-0">
+                Cuando los usuarios envíen consultas aparecerán aquí.
+            </p>
+
+        </div>
+
+    </div>
+
+    @endif
 
 </div>
 

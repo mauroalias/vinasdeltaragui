@@ -1,4 +1,4 @@
-<x-admin-layout title="Panel Administrador">
+<x-admin-layout title="Editar Producto">
 
 <div class="container my-5">
 
@@ -7,22 +7,25 @@
     <div class="mb-5 text-center">
 
         <h1 class="fw-bold">
-            Registro de Productos
+            Modificación de Productos
         </h1>
 
         <p class="text-muted mb-0">
-            Agrega productos a la tienda
+            Edita los datos de los productos activos de la tienda
         </p>
 
     </div>
 
-            <form action="/admin/productos" method="POST" enctype="multipart/form-data">
+            <form
+                action="/admin/productos/{{ $producto->id }}"
+                method="POST"
+                enctype="multipart/form-data">
 
                 @csrf
+                @method('PUT')
 
                 <div class="row">
 
-                    {{-- Nombre --}}
                     <div class="col-md-6 mb-3">
 
                         <label>Nombre</label>
@@ -31,11 +34,11 @@
                             type="text"
                             name="nombre"
                             class="form-control"
+                            value="{{ $producto->nombre }}"
                             required>
 
                     </div>
 
-                    {{-- Categoría --}}
                     <div class="col-md-6 mb-3">
 
                         <label>Categoría</label>
@@ -46,8 +49,12 @@
 
                             @foreach($categorias as $categoria)
 
-                                <option value="{{ $categoria->id }}">
+                                <option
+                                    value="{{ $categoria->id }}"
+                                    {{ $producto->categoria_id == $categoria->id ? 'selected' : '' }}>
+
                                     {{ $categoria->nombre }}
+
                                 </option>
 
                             @endforeach
@@ -56,7 +63,6 @@
 
                     </div>
 
-                    {{-- Precio --}}
                     <div class="col-md-6 mb-3">
 
                         <label>Precio</label>
@@ -65,11 +71,11 @@
                             type="number"
                             name="precio"
                             class="form-control"
+                            value="{{ $producto->precio }}"
                             required>
 
                     </div>
 
-                    {{-- Stock --}}
                     <div class="col-md-6 mb-3">
 
                         <label>Stock</label>
@@ -78,65 +84,130 @@
                             type="number"
                             name="stock"
                             class="form-control"
+                            value="{{ $producto->stock }}"
                             required>
 
                     </div>
 
-                    {{-- Descripción --}}
                     <div class="mb-3">
 
                         <label>Descripción</label>
 
                         <textarea
                             name="descripcion"
-                            class="form-control"
-                            rows="4"></textarea>
+                            class="form-control">{{ $producto->descripcion }}</textarea>
 
                     </div>
 
-                    {{-- Imagen --}}
-                    <div class="mb-3">
+                    
 
-                        <label class="form-label">
-                            Imagen del producto
-                        </label>
+@if($producto->url_imagen)
 
-                        <input
-                            class="form-control"
-                            type="file"
-                            name="url_imagen"
-                            id="imagenProducto"
-                            accept="image/*">
+<div class="mb-4">
 
-                    </div>
+    <label class="form-label fw-semibold">
+        Imagen actual
+    </label>
 
-                    {{-- Vista previa --}}
-                    <div class="text-center mb-4">
+    <div>
 
-                        <img
-                            id="preview"
-                            class="img-fluid rounded shadow"
-                            style="
-                                max-height:250px;
-                                display:none;
-                                object-fit:contain;
-                            ">
+        <img
+            src="{{ asset('img/' . $producto->url_imagen) }}"
+            class="img-fluid rounded shadow"
+            style="
+                max-height:250px;
+                object-fit:contain;
+            ">
 
-                    </div>
+    </div>
 
-                    {{-- Origen --}}
-                    <div class="col-md-6 mb-3">
+</div>
+
+@endif
+
+
+<div class="mb-3">
+
+    <label class="form-label fw-semibold">
+        Seleccionar nueva imagen
+    </label>
+
+    <input
+        class="form-control"
+        type="file"
+        name="url_imagen"
+        id="imagenProducto">
+
+</div>
+
+@error('url_imagen')
+
+<div class="text-danger mt-2">
+
+    {{ $message }}
+
+</div>
+
+@enderror
+
+
+<div class="mb-4">
+
+    <img
+        id="previewNueva"
+        class="img-fluid rounded shadow"
+        style="
+            max-height:250px;
+            object-fit:contain;
+            display:none;
+        ">
+
+</div>
+
+
+<script>
+
+document
+.getElementById('imagenProducto')
+.addEventListener('change', function(e){
+
+    let archivo = e.target.files[0];
+
+    if(!archivo){
+        return;
+    }
+
+    let preview =
+        document.getElementById('previewNueva');
+
+    if(archivo.type.startsWith('image/')){
+
+        preview.src =
+            URL.createObjectURL(archivo);
+
+        preview.style.display='block';
+
+    } else {
+
+        preview.style.display='none';
+
+    }
+
+});
+
+</script>
+ 
 
                         <label>Origen</label>
 
                         <input
                             type="text"
                             name="origen"
-                            class="form-control">
+                            class="form-control"
+                            value="{{ $producto->origen }}">
 
                     </div>
 
-                    {{-- Bodega --}}
                     <div class="col-md-6 mb-3">
 
                         <label>Bodega</label>
@@ -144,11 +215,11 @@
                         <input
                             type="text"
                             name="bodega"
-                            class="form-control">
+                            class="form-control"
+                            value="{{ $producto->bodega }}">
 
                     </div>
 
-                    {{-- Graduación --}}
                     <div class="col-md-6 mb-3">
 
                         <label>Graduación</label>
@@ -156,11 +227,11 @@
                         <input
                             type="text"
                             name="graduacion"
-                            class="form-control">
+                            class="form-control"
+                            value="{{ $producto->graduacion }}">
 
                     </div>
 
-                    {{-- Volumen --}}
                     <div class="col-md-6 mb-3">
 
                         <label>Volumen</label>
@@ -168,11 +239,11 @@
                         <input
                             type="text"
                             name="volumen"
-                            class="form-control">
+                            class="form-control"
+                            value="{{ $producto->volumen }}">
 
                     </div>
 
-                    {{-- Variedad --}}
                     <div class="mb-3">
 
                         <label>Variedad</label>
@@ -180,16 +251,16 @@
                         <input
                             type="text"
                             name="variedad"
-                            class="form-control">
+                            class="form-control"
+                            value="{{ $producto->variedad }}">
 
                     </div>
 
-                    {{-- Botón --}}
                     <div>
 
-                        <button class="btn btn-success">
+                        <button class="btn btn-primary">
 
-                            Guardar producto
+                            Actualizar producto
 
                         </button>
 
@@ -204,26 +275,5 @@
     </div>
 
 </div>
-
-<script>
-
-document
-.getElementById('imagenProducto')
-.addEventListener('change', function(e){
-
-    let preview = document.getElementById('preview');
-
-    let archivo = e.target.files[0];
-
-    if(archivo){
-
-        preview.src = URL.createObjectURL(archivo);
-
-        preview.style.display = "block";
-    }
-
-});
-
-</script>
 
 </x-admin-layout>

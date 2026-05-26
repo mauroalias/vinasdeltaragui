@@ -66,12 +66,98 @@
 
     </div>
 
+    <div class="card shadow border-0 mt">
+
+    <div class="card-header bg-dark text-white">
+
+        Clientes registrados
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table align-middle mb-0">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Nombre</th>
+
+                    <th>Email</th>
+
+                    <th>Rol</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach($usuarios as $usuario)
+
+                <tr>
+
+                    <td>
+
+                        {{ $usuario->id }}
+
+                    </td>
+
+                    <td>
+
+                        {{ $usuario->name }}
+
+                    </td>
+
+                    <td>
+
+                        {{ $usuario->email }}
+
+                    </td>
+
+                    <td>
+
+                        @if($usuario->rol === 'admin')
+
+                            <span class="badge bg-danger">
+
+                                Admin
+
+                            </span>
+
+                        @else
+
+                            <span class="badge bg-primary">
+
+                                Cliente
+
+                            </span>
+
+                        @endif
+
+                    </td>
+
+                </tr>
+
+                @endforeach
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
     <div class="card shadow border-0 mt-4">
 
         <div class="card-header bg-dark text-white">
             Accesos rápidos
         </div>
-
+    
         <div class="card-body">
 
             <a href="/admin/productos"

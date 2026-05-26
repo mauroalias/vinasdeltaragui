@@ -1,78 +1,204 @@
-<x-admin-layout>
+<x-admin-layout title="Baja de Productos">
 
 <div class="container py-5">
 
-    <h2 class="mb-4">
-        Baja de productos
-    </h2>
+    <div class="mb-5 text-center">
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+        <h1 class="fw-bold">
+            Baja de productos
+        </h1>
 
-    <div class="card bg-dark text-white p-4 rounded-4 mb-4">
-
-        <form action="{{ route('admin.productos.darBaja') }}"
-              method="POST">
-
-            @csrf
-            @method('PUT')
-
-            <label class="mb-2">
-                ID del producto a dar de baja
-            </label>
-
-            <input
-                type="number"
-                name="id"
-                class="form-control mb-3"
-                placeholder="Ej: 5"
-                required
-            >
-
-            <button class="btn btn-danger">
-                Dar de baja
-            </button>
-
-        </form>
+        <p class="text-muted mb-0">
+            Gestioná los productos activos de la tienda
+        </p>
 
     </div>
 
-    <div class="card p-4">
+    @if(session('success'))
 
-        <h4 class="mb-3">
-            Productos disponibles
-        </h4>
+        <div class="alert alert-success shadow-sm rounded-3">
 
-        <table class="table table-hover">
+            {{ session('success') }}
 
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Producto</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
-                </tr>
-            </thead>
+        </div>
 
-            <tbody>
+    @endif
 
-                @foreach($productos as $producto)
+    {{-- FORMULARIO --}}
 
-                <tr>
-                    <td>{{ $producto->id }}</td>
-                    <td>{{ $producto->nombre }}</td>
-                    <td>${{ $producto->precio }}</td>
-                    <td>{{ $producto->stock }}</td>
-                </tr>
+    <div class="card shadow border-0 rounded-4 mb-5">
 
-                @endforeach
+        <div class="card-header bg-dark text-white rounded-top-4 py-3">
 
-            </tbody>
+            <h5 class="mb-0">
+                Dar de baja un producto
+            </h5>
 
-        </table>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form
+                action="{{ route('admin.productos.darBaja') }}"
+                method="POST">
+
+                @csrf
+                @method('PUT')
+
+                <label class="form-label fw-semibold mb-2">
+
+                    ID del producto
+
+                </label>
+
+                <div class="d-flex gap-3">
+
+                    <input
+                        type="number"
+                        name="id"
+                        class="form-control rounded-3"
+                        placeholder="Ej: 5"
+                        required>
+
+                    <button
+                        class="btn btn-danger rounded-3 px-4"
+                        onclick="return confirm('¿Seguro que querés dar de baja este producto?')">
+
+                        Dar de baja
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    {{-- TABLA --}}
+
+    <div class="card shadow border-0 rounded-4 overflow-hidden">
+
+        <div class="card-header bg-dark text-white py-3">
+
+            <h5 class="mb-0">
+                Productos disponibles
+            </h5>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table align-middle mb-0">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Producto</th>
+
+                        <th>Precio</th>
+
+                        <th>Stock</th>
+
+                        <th>Estado</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @forelse($productos as $producto)
+
+                    <tr>
+
+                        <td>
+
+                            {{ $producto->id }}
+
+                        </td>
+
+                        <td class="fw-semibold">
+
+                            {{ $producto->nombre }}
+
+                        </td>
+
+                        <td>
+
+                            ${{ number_format($producto->precio,0,",",".") }}
+
+                        </td>
+
+                        <td>
+
+                            @if($producto->stock > 0)
+
+                                <span class="badge bg-success">
+
+                                    {{ $producto->stock }}
+
+                                </span>
+
+                            @else
+
+                                <span class="badge bg-danger">
+
+                                    Sin stock
+
+                                </span>
+
+                            @endif
+
+                        </td>
+
+                        <td>
+
+                            @if($producto->activo)
+
+                                <span class="badge bg-primary">
+
+                                    Activo
+
+                                </span>
+
+                            @else
+
+                                <span class="badge bg-secondary">
+
+                                    Inactivo
+
+                                </span>
+
+                            @endif
+
+                        </td>
+
+                    </tr>
+
+                    @empty
+
+                    <tr>
+
+                        <td colspan="5" class="text-center py-4">
+
+                            No hay productos registrados.
+
+                        </td>
+
+                    </tr>
+
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 

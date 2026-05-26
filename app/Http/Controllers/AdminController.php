@@ -7,6 +7,7 @@ use App\Models\Categoria;
 use App\Models\Contacto;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductoRequest;
 
 class AdminController extends Controller
 {
@@ -22,22 +23,26 @@ class AdminController extends Controller
         $this->verificarAdmin();
 
         return view('backend.admin.dashboard', [
-            'totalUsuarios' => User::count(),
-            'totalProductos' => Producto::where('activo', 1)->count(),
-            'totalContactos' => Contacto::count(),
-        ]);
+    'totalUsuarios' => User::count(),
+
+    'totalProductos' => Producto::count(),
+
+    'totalContactos' => Contacto::count(),
+
+    'usuarios' => User::all(),
+]); 
     }
 
     public function productos()
-    {
-        $this->verificarAdmin();
+{
+    $this->verificarAdmin();
 
-        return view('backend.admin.productos', [
-            'productos' => Producto::with('categoria')
-                ->where('activo', 1)
-                ->get(),
-        ]);
-    }
+    return view('backend.admin.productos', [
+        'productos' => Producto::with('categoria')
+            ->orderBy('id')
+            ->get(),
+    ]);
+}
 
     public function crearProducto()
     {
@@ -48,32 +53,36 @@ class AdminController extends Controller
         ]);
     }
 
-    public function guardarProducto(Request $request)
-    {
-        $this->verificarAdmin();
+    public function guardarProducto(ProductoRequest $request)
+{
+    $this->verificarAdmin();
 
-        $datos = $request->validate([
-            'categoria_id' => 'required|exists:categorias,id',
-            'nombre' => 'required|string|max:150',
-            'descripcion' => 'required|string|max:1000',
-            'precio' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'url_imagen' => 'nullable|string|max:255',
-            'origen' => 'nullable|string|max:150',
-            'bodega' => 'nullable|string|max:150',
-            'graduacion' => 'nullable|string|max:50',
-            'volumen' => 'nullable|string|max:50',
-            'variedad' => 'nullable|string|max:150',
-        ]);
+    $datos = $request->validated();
 
-        Producto::create($datos);
+    if ($request->hasFile('url_imagen')) {
 
-        return redirect('/admin/productos')
-            ->with(
-                'success_message',
-                'Producto registrado correctamente.'
-            );
+        $imagen = $request->file('url_imagen');
+
+        $nombreImagen =
+            time() . '_' . $imagen->getClientOriginalName();
+
+        $imagen->move(
+            public_path('img/catalogoproductos'),
+            $nombreImagen
+        );
+
+        $datos['url_imagen'] =
+            'img/catalogoproductos/' . $nombreImagen;
     }
+
+    Producto::create($datos);
+
+    return redirect('/admin/productos')
+        ->with(
+            'success_message',
+            'Producto registrado correctamente.'
+        );
+}
 
     public function contactos()
     {
@@ -119,4 +128,75 @@ class AdminController extends Controller
                 'Producto dado de baja correctamente'
             );
     }
+
+    public function reactivarProducto(Request $request)
+{
+    $this->verificarAdmin();
+
+    $request->validate([
+        'id' => 'required|exists:productos,id',
+    ]);
+
+    $producto = Producto::findOrFail($request->id);
+
+    $producto->activo = 1;
+
+    $producto->save();
+
+    return redirect()
+        ->back()
+        ->with(
+            'success_message',
+            'Producto reactivado correctamente'
+        );
+}
+
+
+    public function editarProducto($id)
+{
+    $this->verificarAdmin();
+
+    return view(
+        'backend.admin.editar-producto',
+        [
+            'producto' => Producto::findOrFail($id),
+            'categorias' => Categoria::all(),
+        ]
+    );
+}
+
+public function actualizarProducto(
+    ProductoRequest $request,
+    $id
+) {
+    $this->verificarAdmin();
+
+    $producto = Producto::findOrFail($id);
+
+    $datos = $request->validated();
+
+    if ($request->hasFile('url_imagen')) {
+
+        $imagen = $request->file('url_imagen');
+
+        $nombreImagen =
+            time().'_'.$imagen->getClientOriginalName();
+
+        $imagen->move(
+            public_path('img/catalogoproductos'),
+            $nombreImagen
+        );
+
+        $datos['url_imagen'] =
+            'img/catalogoproductos/'.$nombreImagen;
+    }
+
+    $producto->update($datos);
+
+    return redirect('/admin/productos')
+        ->with(
+            'success_message',
+            'Producto actualizado correctamente.'
+        );
+}
 }
