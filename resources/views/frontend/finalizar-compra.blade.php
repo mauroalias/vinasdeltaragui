@@ -2,7 +2,7 @@
 
 <div class="container my-5">
     <div class="row g-5">
-        
+    <!-- Columna izquierda -->
         <div class="col-lg-7">
     <h3 class="mb-4 fw-bold">Detalles de facturación</h3>
     
@@ -51,8 +51,18 @@
                 <div class="row g-3">
                     <div class="col-12">
                         <label class="form-label text-muted small fw-bold">Dirección completa</label>
-                        <input type="text" class="form-control" name="direccion" id="input_direccion" placeholder="Calle, número, depto, barrio...">
+                        <input type="text" class="form-control" name="direccion" id="input_direccion" placeholder="Calle, número, barrio...">
                     </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold">Piso (Opcional)</label>
+                        <input type="text" class="form-control" name="piso" id="input_piso" placeholder="Ej: 4to">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold">Departamento (Opcional)</label>
+                        <input type="text" class="form-control" name="departamento" id="input_depto" placeholder="Ej: B">
+                    </div>
+
                     <div class="col-md-8">
                         <label class="form-label text-muted small fw-bold">Provincia</label>
                         <select class="form-select" name="provincia" id="input_provincia">
@@ -90,11 +100,63 @@
             </div>
         </div>
 
+        <!-- PAGO -->
         <h5 class="mb-3 fw-bold">3. Método de pago</h5>
-        <div class="caja-seleccion mb-4" style="border-color: #0d6efd; background-color: #f0f7ff;">
+
+        <!-- Opción 1: Tarjeta de Crédito / Débito -->
+        <div class="caja-seleccion mb-3" id="contenedor_mp" style="border-color: #0d6efd; background-color: #f0f7ff;">
+            <div class="form-check d-flex align-items-center mb-2">
+                <input class="form-check-input" type="radio" name="pago" id="pago_mp" value="tarjeta" checked onchange="togglePago()">
+                <label class="form-check-label fw-bold ms-2" for="pago_mp">Tarjeta de Crédito o Débito</label>
+            </div>
+            
+            <!-- FORMULARIO DE TARJETA -->
+            <div id="info_mp" class="mt-3 ms-4 pe-2">
+                <div class="row g-3">
+                    <!-- Número de Tarjeta -->
+                    <div class="col-12">
+                        <label class="form-label text-muted small fw-bold">Número de tarjeta</label>
+                        <input type="text" class="form-control input-tarjeta-campo" name="numero_tarjeta" id="num_tarjeta" placeholder="•••• •••• •••• ••••" inputmode="numeric" maxlength="19" required>
+                    </div>
+                    
+                    <!-- Nombre del Titular -->
+                    <div class="col-12">
+                        <label class="form-label text-muted small fw-bold">Nombre del titular (como figura en la tarjeta)</label>
+                        <input type="text" class="form-control input-tarjeta-campo" name="titular_tarjeta" id="titular_tarjeta" value="{{ auth()->user()->name ?? '' }}" required>
+                    </div>
+
+                    <!-- Vencimiento -->
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold">Vencimiento</label>
+                        <input type="text" class="form-control input-tarjeta-campo" name="vencimiento_tarjeta" id="vence_tarjeta" placeholder="MM/AA" maxlength="5" pattern="(0[1-9]|1[0-2])\/[0-9]{2}" title="Ingresá una fecha válida (MM/AA). El mes debe ser de 01 a 12." required>
+                    </div>
+
+                    <!-- Código de seguridad (3 dígitos) -->
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small fw-bold">Cód. de seguridad</label>
+                        <input type="text" class="form-control input-tarjeta-campo" name="cvv_tarjeta" id="cvv_tarjeta" placeholder="Ej: 123" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Opción 2: Transferencia Bancaria -->
+        <div class="caja-seleccion mb-4" id="contenedor_transferencia">
             <div class="form-check d-flex align-items-center">
-                <input class="form-check-input" type="radio" name="pago" id="mercadopago" value="mercadopago" checked>
-                <label class="form-check-label fw-bold ms-2" for="mercadopago">MercadoPago</label>
+                <input class="form-check-input" type="radio" name="pago" id="pago_transferencia" value="transferencia" onchange="togglePago()">
+                <label class="form-check-label fw-bold ms-2" for="pago_transferencia">Transferencia Bancaria directa</label>
+            </div>
+            
+            <!-- Datos de la cuenta -->
+            <div id="info_transferencia" class="mt-3 ms-4 p-3 rounded" style="display: none; background-color: #fff; border: 1px solid #dee2e6;">
+                <h6 class="fw-bold text-dark mb-2">Datos para realizar la transferencia:</h6>
+                <ul class="list-unstyled mb-0 small text-muted">
+                    <li><strong>Banco:</strong> Banco de Corrientes</li>
+                    <li><strong>Titular:</strong> Viñas del Taragüí S.H.</li>
+                    <li><strong>CBU:</strong> 0940000000000000000000</li>
+                    <li><strong>Alias:</strong> vinas.taragui</li>
+                </ul>
+                <small class="d-block mt-2 text-danger fw-bold">Por favor, enviá el comprobante de pago por WhatsApp una vez realizado.</small>
             </div>
         </div>
 
@@ -104,6 +166,7 @@
     </form>
 </div>
 
+        <!-- Columna derecha -->
         <div class="col-lg-5">
     <div class="p-4 rounded-4 text-white shadow-lg d-flex flex-column" style="background-color: #1f2227; min-height: 100%;">
         
@@ -170,32 +233,163 @@
 </div>
 
 <script>
+    // 1. CONTROL DE VISIBILIDAD DE ENVÍO Y PAGO
     function toggleEnvio() {
-        // Seleccionamos los elementos del DOM
         const retiroSeleccionado = document.getElementById('retiro').checked;
         const formularioDireccion = document.getElementById('formulario_direccion');
         
-        // Seleccionamos los inputs que están dentro del panel de envío
         const inputDireccion = document.getElementById('input_direccion');
         const inputProvincia = document.getElementById('input_provincia');
         const inputCp = document.getElementById('input_cp');
 
         if (retiroSeleccionado) {
-            // Ocultamos la caja
             formularioDireccion.style.display = 'none';
-            // Les quitamos el "required" para que deje procesar la compra
             inputDireccion.removeAttribute('required');
             inputProvincia.removeAttribute('required');
             inputCp.removeAttribute('required');
         } else {
-            // Mostramos la caja
             formularioDireccion.style.display = 'block';
-            // Los hacemos obligatorios
             inputDireccion.setAttribute('required', 'required');
             inputProvincia.setAttribute('required', 'required');
             inputCp.setAttribute('required', 'required');
         }
     }
+
+    function togglePago() {
+        const mpSeleccionado = document.getElementById('pago_mp').checked;
+        const contenedorMp = document.getElementById('contenedor_mp');
+        const infoMp = document.getElementById('info_mp');
+        const contenedorTransf = document.getElementById('contenedor_transferencia');
+        const infoTransf = document.getElementById('info_transferencia');
+        const inputsTarjeta = document.querySelectorAll('.input-tarjeta-campo');
+
+        if (mpSeleccionado) {
+            contenedorMp.style.borderColor = '#0d6efd';
+            contenedorMp.style.backgroundColor = '#f0f7ff';
+            infoMp.style.display = 'block';
+            inputsTarjeta.forEach(input => input.setAttribute('required', 'required'));
+            contenedorTransf.style.borderColor = '#dee2e6';
+            contenedorTransf.style.backgroundColor = '#f8f9fa';
+            infoTransf.style.display = 'none';
+        } else {
+            contenedorTransf.style.borderColor = '#0d6efd';
+            contenedorTransf.style.backgroundColor = '#f0f7ff';
+            infoTransf.style.display = 'block';
+            contenedorMp.style.borderColor = '#dee2e6';
+            contenedorMp.style.backgroundColor = '#f8f9fa';
+            infoMp.style.display = 'none';
+            inputsTarjeta.forEach(input => input.removeAttribute('required'));
+        }
+    }
+
+    // 2. MÁSCARAS Y VALIDACIONES EN TIEMPO REAL
+    document.addEventListener("DOMContentLoaded", function() {
+
+        // --- DETECTOR DE BOTÓN ATRÁS (Evita el BFCache del navegador) ---
+        window.addEventListener('pageshow', function(event) {
+            const navigationType = performance.getEntriesByType("navigation")[0]?.type;
+            if (event.persisted || navigationType === "back_forward") {
+                window.location.reload();
+            }
+        });
+        
+        // --- Validación Teléfono ---
+        const inputTelefono = document.querySelector('input[name="telefono"]');
+        if (inputTelefono) {
+            inputTelefono.setAttribute('pattern', '[0-9\\s\\-]{8,15}');
+            inputTelefono.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9\s\-]/g, '');
+            });
+        }
+
+        // --- Validación Dirección ---
+        const inputDireccion = document.getElementById('input_direccion');
+        if (inputDireccion) {
+            inputDireccion.setAttribute('pattern', '.{5,}');
+        }
+
+        // --- Validación Código Postal ---
+        const inputCp = document.getElementById('input_cp');
+        if (inputCp) {
+            inputCp.setAttribute('pattern', '[A-Z0-9]{4,8}');
+            inputCp.addEventListener('input', function() {
+                this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            });
+        }
+
+        // --- Separador de espacios en la Tarjeta ---
+        const inputTarjeta = document.getElementById('num_tarjeta');
+        if (inputTarjeta) {
+            inputTarjeta.setAttribute('maxlength', '19');
+            inputTarjeta.addEventListener('input', function() {
+                let valor = this.value.replace(/\D/g, ''); 
+                let valorFormateado = valor.match(/.{1,4}/g);
+                this.value = valorFormateado ? valorFormateado.join(' ') : valor;
+            });
+        }
+
+        // --- Barra automática en Vencimiento ---
+        const inputVence = document.getElementById('vence_tarjeta');
+        if (inputVence) {
+            inputVence.addEventListener('input', function() {
+                let valor = this.value.replace(/\D/g, ''); 
+                if (valor.length >= 2) {
+                    let mes = valor.substring(0, 2);
+                    let anio = valor.substring(2, 4);
+                    this.value = mes + '/' + anio;
+                } else {
+                    this.value = valor;
+                }
+            });
+
+            inputVence.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && this.value.length === 3) {
+                    this.value = this.value.substring(0, 2);
+                }
+            });
+        }
+
+        // --- Bloqueo de letras en Código de Seguridad (CVV) ---
+        const inputCvv = document.getElementById('cvv_tarjeta');
+        if (inputCvv) {
+            inputCvv.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, ''); 
+            });
+        }
+
+        // --- Validación de Tarjeta Vencida al Enviar el Formulario ---
+        const formulario = document.querySelector('form[action="/procesar-compra"]');
+        if (formulario && inputVence) {
+            formulario.addEventListener('submit', function(e) {
+                const pagoMp = document.getElementById('pago_mp');
+                if (pagoMp && !pagoMp.checked) return;
+
+                const valor = inputVence.value; 
+                if (valor.length === 5) {
+                    const partes = valor.split('/');
+                    const mesInput = parseInt(partes[0], 10);
+                    const anioInput = parseInt('20' + partes[1], 10); 
+
+                    const fechaActual = new Date();
+                    const mesActual = fechaActual.getMonth() + 1; 
+                    const anioActual = fechaActual.getFullYear();
+
+                    if (anioInput < anioActual || (anioInput === anioActual && mesInput < mesActual)) {
+                        e.preventDefault(); 
+                        inputVence.setCustomValidity("La tarjeta está vencida. Revisá la fecha.");
+                        inputVence.reportValidity();
+                    } else {
+                        inputVence.setCustomValidity("");
+                    }
+                }
+            });
+
+            inputVence.addEventListener('input', function() {
+                this.setCustomValidity("");
+            });
+        }
+
+    }); 
 </script>
 
 </x-layout>

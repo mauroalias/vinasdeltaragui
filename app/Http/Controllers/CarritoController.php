@@ -69,6 +69,10 @@ class CarritoController extends Controller
 
         $carrito = session('carrito', []);
 
+        if (empty($carrito)) {
+            return redirect('/catalogo')->with('mensaje', 'Tu carrito está vacío. Agregá productos para poder finalizar una compra.');
+        }
+
         $subtotal = 0;
         foreach ($carrito as $item) {
             $subtotal += $item['precio'] * $item['cantidad'];
