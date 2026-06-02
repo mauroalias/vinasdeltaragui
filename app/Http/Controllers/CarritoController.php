@@ -136,7 +136,8 @@ class CarritoController extends Controller
     // Vaciar el carrito de sesión
     session()->forget('carrito');
 
-    return redirect('/compra-exitosa');
+    // Redirigimos al comprobante nuevo pasando el ID
+    return redirect('/comprobante/' . $venta->id)->with('mensaje', '¡Compra realizada con éxito!');
 }
 
     public function sumar($clave)
@@ -197,5 +198,18 @@ class CarritoController extends Controller
             'titulo' => '¡Pedido Confirmado!',
             'mensaje' => 'Tu pedido fue registrado y pagado correctamente. Nos comunicaremos para coordinar la entrega.'
         ]);
-}
+    }
+
+    public function comprobante($id)
+    {
+        // Buscar la venta y sus detalles en la BD
+        $pedido = VentaCabecera::with('detalles')->findOrFail($id);
+
+        // Evitar que un usuario vea facturas de otro modificando la URL
+        if ($pedido->user_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para ver este comprobante.');
+        }
+
+        return view('frontend.factura', compact('pedido'));
+    }
 }

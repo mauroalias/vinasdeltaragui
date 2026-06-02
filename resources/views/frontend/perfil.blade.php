@@ -143,6 +143,7 @@
                     <th>Productos</th>
                     <th>Total</th>
                     <th>Estado</th>
+                    <th>Comprobante</th> 
                 </tr>
             </thead>
             <tbody>
@@ -153,6 +154,12 @@
                     <td>{{ $venta->detalles->count() }} producto/s</td>
                     <td>${{ number_format($venta->total, 0, ',', '.') }}</td>
                     <td><span class="badge bg-success">{{ ucfirst($venta->estado) }}</span></td>
+                    
+                    <td>
+                        <a href="/comprobante/{{ $venta->id }}" class="btn btn-sm btn-outline-dark" target="_blank">
+                            <i class="fas fa-file-invoice"></i> Ver
+                        </a>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

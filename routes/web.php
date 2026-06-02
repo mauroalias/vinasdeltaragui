@@ -139,6 +139,9 @@ Route::get('/compra-exitosa',
 Route::get('/carrito/vaciar',
     [CarritoController::class, 'vaciar']);
 
+Route::get('/comprobante/{id}',
+    [CarritoController::class, 'comprobante'])->middleware('auth');
+
 /*
 Catálogo
 */

@@ -183,9 +183,9 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close" style="padding: 0.5rem;"></button>
             </div>
         @endif
-        <div class="flex-grow-1 overflow-auto pe-2 mb-4" style="max-height: 380px;">
+        <div class="flex-grow-1 pe-2 mb-4">
 
-        <div class="flex-grow-1 overflow-auto pe-2 mb-4" style="max-height: 380px;">
+        <div class="flex-grow-1 pe-2 mb-4">
             @if(count($carrito) > 0)
                 @foreach($carrito as $clave => $item)
                     <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 1px dashed rgba(255, 255, 255, 0.1);">
