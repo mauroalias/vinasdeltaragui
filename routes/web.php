@@ -144,6 +144,9 @@ Route::get('/carrito/restar/{clave}',
 Route::get('/compra-exitosa',
     [CarritoController::class, 'exito']);
 
+Route::get('/carrito/vaciar',
+    [CarritoController::class, 'vaciar']);
+
 /*
 Catálogo
 */

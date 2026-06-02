@@ -98,8 +98,20 @@ class CarritoController extends Controller
         $carrito = session()->get('carrito', []);
         
         if (isset($carrito[$clave])) {
-            $carrito[$clave]['cantidad']++;
-            session()->put('carrito', $carrito);
+            // Buscamos el producto real en la base de datos para consultar el stock
+            $producto = Producto::find($clave);
+            
+            // Verificamos que el producto exista y que lo que hay en el carrito sea MENOR al stock real
+            if ($producto && $carrito[$clave]['cantidad'] < $producto->stock) {
+                $carrito[$clave]['cantidad']++;
+                session()->put('carrito', $carrito);
+            } else {
+                // Capturamos el nombre exacto del producto desde el carrito
+                $nombreProducto = $carrito[$clave]['nombre'] ?? 'este producto';
+                
+                // Lo inyectamos en el mensaje
+                return back()->with('error', '¡Stock máximo alcanzado para ' . $nombreProducto . '!');
+            }
         }
         
         return back();
@@ -120,6 +132,14 @@ class CarritoController extends Controller
         }
         
         return back();
+    }
+
+    public function vaciar()
+    {
+        // Esto borra todo el carrito de la memoria del navegador
+        session()->forget('carrito');
+        
+        return redirect('/catalogo')->with('mensaje', 'El carrito ha sido vaciado.');
     }
 
     public function exito()

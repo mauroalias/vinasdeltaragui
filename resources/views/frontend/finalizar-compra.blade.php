@@ -168,7 +168,7 @@
 
         <!-- Columna derecha -->
         <div class="col-lg-5">
-    <div class="p-4 rounded-4 text-white shadow-lg d-flex flex-column" style="background-color: #1f2227; min-height: 100%;">
+    <div class="p-4 rounded-4 text-white shadow-lg d-flex flex-column h-100" style="background-color: #1f2227;">
         
         <div class="text-center mb-4">
             <img src="{{ asset('img/logo1.png') }}" alt="Viñas del Taragüí" style="max-height: 70px;">
@@ -176,6 +176,14 @@
 
         <h5 class="text-center text-uppercase fw-light mb-0" style="letter-spacing: 2px;">Resumen del pedido</h5>
         <hr style="border-color: rgba(255, 255, 255, 0.15); margin: 20px 0;">
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show p-2 small text-center mb-3" role="alert" style="background-color: rgba(220, 53, 69, 0.1); border-color: rgba(220, 53, 69, 0.5); color: #ff6b6b;">
+                <strong>¡Aviso!</strong> {{ session('error') }}
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close" style="padding: 0.5rem;"></button>
+            </div>
+        @endif
+        <div class="flex-grow-1 overflow-auto pe-2 mb-4" style="max-height: 380px;">
 
         <div class="flex-grow-1 overflow-auto pe-2 mb-4" style="max-height: 380px;">
             @if(count($carrito) > 0)
@@ -214,6 +222,12 @@
         </div>
 
         <hr style="border-color: rgba(255, 255, 255, 0.15); margin-top: auto;">
+
+        <div class="mt-3 text-center">
+            <a href="/carrito/vaciar" class="text-danger small text-decoration-none">
+                <i class="fas fa-trash"></i> Vaciar el carrito
+            </a>
+        </div>
 
         <div class="d-flex justify-content-between text-white-50 mb-2 mt-2">
             <span>Subtotal</span>
