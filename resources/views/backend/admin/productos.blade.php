@@ -148,7 +148,7 @@
             href="/admin/productos/{{ $producto->id }}/editar"
             class="btn btn-success btn-sm rounded-3">
 
-            Editar
+            Modificar
 
         </a>
 

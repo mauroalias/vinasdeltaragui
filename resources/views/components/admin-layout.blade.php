@@ -50,7 +50,7 @@
         <li>
             <a class="dropdown-item"
                href="/admin/productos">
-                VER PRODUCTOS
+                GESTIONAR PRODUCTOS
             </a>
         </li>
 
@@ -80,12 +80,6 @@
                         </a>
                     </li>
 
-                    <li class="nav-item d-flex align-items-center">
-                        <a class="nav-link d-flex align-items-center" href="/">
-                            VER SITIO
-                        </a>
-                    </li>
-
                 </ul>
 
                 <!-- DERECHA -->
@@ -94,15 +88,10 @@
                     <li class="nav-item me-3 d-flex align-items-center">
                         <div class="d-flex align-items-center text-white">
 
-                            <div class="rounded-circle bg-light text-dark d-flex align-items-center justify-content-center me-2"
-                                 style="width: 36px; height: 36px; font-size: 18px;">
-                                👤
-                            </div>
-
-                            <div class="lh-sm">
-                                <small class="text-white-50 d-block">ADMIN</small>
-                                <strong>{{ auth()->user()->name }}</strong>
-                            </div>
+                            <a href="/admin"
+                            class="usuario-navbar">
+                            {{ strtoupper(auth()->user()->name) }}
+                            </a>
 
                         </div>
                     </li>
@@ -111,8 +100,9 @@
                         <form action="{{ route('logout') }}" method="POST" class="m-0 d-flex align-items-center">
                             @csrf
 
-                            <button type="submit" class="btn btn-outline-light btn-sm rounded-pill px-3">
-                                Cerrar sesión
+                            <button type="submit"
+                            class="nav-link border-0 bg-transparent text-uppercase">  
+                             CERRAR SESIÓN
                             </button>
                         </form>
                     </li>

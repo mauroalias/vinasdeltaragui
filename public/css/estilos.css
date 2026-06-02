@@ -551,3 +551,46 @@
     border-color: #0d6efd;
     background-color: #f0f7ff;
 }
+
+.usuario-navbar {
+    color: #ffffff;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    position: relative;
+    transition: 0.3s;
+}
+
+.usuario-navbar:hover {
+    color: #d4af37;
+}
+
+.usuario-navbar::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: #d4af37;
+    left: 0;
+    bottom: -5px;
+    transition: 0.3s;
+}
+
+.usuario-navbar:hover::after {
+    width: 100%;
+}
+
+.btn-cerrar-navbar {
+    background-color: #dc3545;
+    border: none;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.btn-cerrar-navbar:hover {
+    background-color: #bb2d3b;
+    color: white;
+}

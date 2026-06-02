@@ -40,89 +40,83 @@
 
                 </ul>
 
-                                <!-- DERECHA DEL NAVBAR-->
-                <ul class="navbar-nav ms-auto align-items-center">
+                                <!-- DERECHA DEL NAVBAR -->
+<ul class="navbar-nav ms-auto align-items-center">
 
-                    @auth
-                        <li class="nav-item">
-                            <button class="btn nav-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelPerfil">
-                                MI PERFIL
-                            </button>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="/registro">REGISTRARSE</a>
-                        </li>
+    @auth
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="/iniciosesion">INICIAR SESIÓN</a>
-                        </li>
-                    @endauth
+        @if(auth()->user()->rol === 'admin')
 
-                    <li class="nav-item">
-                        <button class="btn nav-link position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelCarrito">
-                            🛒
-                            <span class="badge bg-danger">
-                                {{ session('carrito') ? count(session('carrito')) : 0 }}
-                            </span>
-                        </button>
-                    </li>
+            <li class="nav-item">
+                <a class="nav-link text-uppercase"
+                   href="/admin">
+                    {{ auth()->user()->name }}
+                </a>
+            </li>
 
-                </ul>
+        @else
+
+            <li class="nav-item">
+                <a class="nav-link text-uppercase"
+                   href="/perfil">
+                    {{ auth()->user()->name }}
+                </a>
+            </li>
+
+        @endif
+
+        <li class="nav-item">
+            <form action="{{ route('logout') }}"
+                  method="POST"
+                  class="d-inline">
+
+                @csrf
+
+                <button type="submit"
+                class="nav-link border-0 bg-transparent text-uppercase p-0">
+
+                    CERRAR SESIÓN
+
+                </button>
+
+            </form>
+        </li>
+
+    @else
+
+        <li class="nav-item">
+            <a class="nav-link" href="/registro">
+                REGISTRARSE
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/iniciosesion">
+                INICIAR SESIÓN
+            </a>
+        </li>
+
+    @endauth
+
+    <li class="nav-item">
+        <button
+            class="btn nav-link position-relative"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#panelCarrito">
+
+            🛒
+
+            <span class="badge bg-danger">
+                {{ session('carrito') ? count(session('carrito')) : 0 }}
+            </span>
+
+        </button>
+    </li>
+
+</ul>
 
             </div>
         </div>
     </nav>
 </header>
-
-@auth
-<div class="offcanvas offcanvas-end" tabindex="-1" id="panelPerfil">
-
-    <div class="offcanvas-header">
-
-        <h5 class="offcanvas-title">
-            {{ auth()->user()->rol === 'admin' ? 'Perfil Administrador' : 'Mi Perfil' }}
-        </h5>
-
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-
-    </div>
-
-    <div class="offcanvas-body">
-
-        <p><strong>Nombre:</strong> {{ auth()->user()->name }}</p>
-
-        <p><strong>Email:</strong> {{ auth()->user()->email }}</p>
-
-        <p><strong>Rol:</strong> {{ auth()->user()->rol }}</p>
-
-        <hr>
-
-        @if(auth()->user()->rol === 'admin')
-
-            <a href="/admin" class="btn btn-dark w-100 mb-2">
-                Panel administrador
-            </a>
-
-        @else
-
-            <a href="/perfil" class="btn btn-dark w-100 mb-2">
-                Ver perfil completo
-            </a>
-
-        @endif
-
-        <form action="{{ route('logout') }}" method="POST">
-
-            @csrf
-
-            <button type="submit" class="btn btn-danger w-100">
-                Cerrar sesión
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
-@endauth
