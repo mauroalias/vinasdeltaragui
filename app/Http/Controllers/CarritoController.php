@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Producto;
+use App\Models\VentaCabecera;
+use App\Models\VentaDetalle;
 
 class CarritoController extends Controller
 {
@@ -83,15 +85,59 @@ class CarritoController extends Controller
         return view('frontend.finalizar-compra', compact('carrito', 'subtotal', 'total'));
     }
 
-    public function procesarCompra(Request $request)
-    {
-        // Acá a futuro guardarías el pedido en la base de datos (tabla pedidos)
-        
-        // Como la compra ya se confirmó, AHORA SÍ vaciamos el carrito
-        session()->forget('carrito');
+   public function procesarCompra(Request $request)
+{
+    $carrito = session('carrito', []);
 
-       return redirect('/compra-exitosa');
+    if (empty($carrito)) {
+        return redirect('/catalogo');
     }
+
+    // Calcular total
+    $total = 0;
+    foreach ($carrito as $item) {
+        $total += $item['precio'] * $item['cantidad'];
+    }
+
+    // Crear la cabecera de la venta
+    $venta = VentaCabecera::create([
+        'user_id'     => auth()->id(),
+        'estado'      => 'confirmado',
+        'total'       => $total,
+        'fecha_venta' => now(),
+    ]);
+
+    // Guardar cada producto como detalle
+    foreach ($carrito as $item) {
+
+    $producto = Producto::find($item['id']);
+
+    if (!$producto || $producto->stock < $item['cantidad']) {
+
+        return back()->with(
+            'error',
+            'No hay stock suficiente de ' . $item['nombre']
+        );
+    }
+
+    VentaDetalle::create([
+        'venta_id'        => $venta->id,
+        'producto_id'     => $item['id'],
+        'nombre_producto' => $item['nombre'],
+        'cantidad'        => $item['cantidad'],
+        'precio_unitario' => $item['precio'],
+        'subtotal'        => $item['precio'] * $item['cantidad'],
+    ]);
+
+    $producto->stock -= $item['cantidad'];
+    $producto->save();
+}
+
+    // Vaciar el carrito de sesión
+    session()->forget('carrito');
+
+    return redirect('/compra-exitosa');
+}
 
     public function sumar($clave)
     {

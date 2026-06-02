@@ -36,14 +36,17 @@
 
     <li class="nav-item dropdown">
 
-    <a class="nav-link dropdown-toggle"
-       href="#"
-       id="productosDropdown"
-       role="button"
-       data-bs-toggle="dropdown"
-       aria-expanded="false">
-        PRODUCTOS
-    </a>
+    <a class="nav-link d-flex align-items-center gap-1"
+   href="#"
+   id="productosDropdown"
+   role="button"
+   data-bs-toggle="dropdown"
+   aria-expanded="false">
+
+    PRODUCTOS
+    <span class="flecha">▾</span>
+
+</a>
 
     <ul class="dropdown-menu dropdown-menu-dark">
 

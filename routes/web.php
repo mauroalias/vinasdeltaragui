@@ -44,20 +44,12 @@ Route::post('/newsletter', function () {
 
 });
 
-Route::get('/perfil', function () {
-
-    return view('frontend.perfil');
-
-})->middleware('auth');
+Route::get('/perfil', [PerfilController::class, 'index'])->middleware('auth');
 
 Route::put('/perfil/password', [PerfilController::class, 'actualizarPassword'])
     ->middleware('auth')
     ->name('profile.update.password');
 
-
-/*
-Admin
-*/
 
 /*
 Admin

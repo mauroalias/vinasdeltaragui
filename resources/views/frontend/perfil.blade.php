@@ -97,24 +97,30 @@
                     <div class="row text-center">
                         <div class="col-md-4 mb-3">
                             <div class="p-3 bg-light rounded-4">
-                                <h3 class="mb-0">0</h3>
+                                <h3 class="mb-0">{{ $totalCompras }}</h3>
                                 <small class="text-muted">Compras realizadas</small>
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <div class="p-3 bg-light rounded-4">
-                                <h3 class="mb-0">$0</h3>
+                                <h3 class="mb-0">
+                                ${{ number_format($totalGastado, 0, ',', '.') }}
+                                </h3>
                                 <small class="text-muted">Total gastado</small>
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
-                            <div class="p-3 bg-light rounded-4">
-                                <h3 class="mb-0">0</h3>
-                                <small class="text-muted">Productos favoritos</small>
-                            </div>
-                        </div>
+    <div class="p-3 bg-light rounded-4">
+        <h3 class="mb-0">
+        {{ $ventas->first() ? $ventas->first()->fecha_venta->format('d/m/Y') : '-' }}
+        </h3>
+        <small class="text-muted">
+            Última compra
+        </small>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -123,9 +129,36 @@
                 <div class="card-body p-4">
                     <h4 class="mb-4">Historial de compras</h4>
 
-                    <div class="alert alert-light border rounded-4 mb-0">
-                        Todavía no tenés compras registradas.
-                    </div>
+                    @if($ventas->isEmpty())
+    <div class="alert alert-light border rounded-4 mb-0">
+        Todavía no tenés compras registradas.
+    </div>
+@else
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Fecha</th>
+                    <th>Productos</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($ventas as $venta)
+                <tr>
+                    <td>{{ $venta->id }}</td>
+                    <td>{{ $venta->fecha_venta->format('d/m/Y H:i') }}</td>
+                    <td>{{ $venta->detalles->count() }} producto/s</td>
+                    <td>${{ number_format($venta->total, 0, ',', '.') }}</td>
+                    <td><span class="badge bg-success">{{ ucfirst($venta->estado) }}</span></td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@endif
                 </div>
             </div>
 

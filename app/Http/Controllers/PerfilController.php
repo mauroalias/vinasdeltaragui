@@ -5,10 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Models\VentaCabecera;
 
 class PerfilController extends Controller
 {
-    
+
+public function index()
+{
+    $ventas = VentaCabecera::where('user_id', auth()->id())
+        ->where('estado', 'confirmado')
+        ->with('detalles')
+        ->latest('fecha_venta')
+        ->get();
+
+    $totalCompras = $ventas->count();
+    $totalGastado = $ventas->sum('total');
+
+    return view('frontend.perfil', compact('ventas', 'totalCompras', 'totalGastado'));
+}
     public function actualizarPassword(Request $request)
     {
         $request->validate([
