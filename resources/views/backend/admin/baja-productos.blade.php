@@ -43,8 +43,7 @@
                 method="POST">
 
                 @csrf
-                @method('PUT')
-
+                
                 <label class="form-label fw-semibold mb-2">
 
                     ID del producto

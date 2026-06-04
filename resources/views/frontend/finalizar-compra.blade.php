@@ -224,7 +224,7 @@
         <hr style="border-color: rgba(255, 255, 255, 0.15); margin-top: auto;">
 
         <div class="mt-3 text-center">
-            <a href="/carrito/vaciar" class="text-danger small text-decoration-none">
+            <a href="/carrito/vaciar" class="text-danger small text-decoration-none" onclick="return confirm('¿Seguro que querés vaciar todo el carrito?')">
                 <i class="fas fa-trash"></i> Vaciar el carrito
             </a>
         </div>
