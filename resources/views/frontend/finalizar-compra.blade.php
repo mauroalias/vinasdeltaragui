@@ -4,6 +4,18 @@
     <div class="row g-5">
         <div class="col-lg-7">
             <h3 class="mb-4 fw-bold">Detalles de facturación</h3>
+
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show rounded-3 mb-4 shadow-sm" role="alert">
+                    <strong>Por favor, revisá los siguientes campos:</strong>
+                    <ul class="mb-0 mt-1 small">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             
             <form action="/procesar-compra" method="POST">
                 @csrf
@@ -24,7 +36,6 @@
                                class="form-control form-control-lg {{ isset($datosFacturacion->telefono) ? 'bg-light' : '' }}" 
                                name="telefono" 
                                value="{{ $datosFacturacion->telefono ?? '' }}" 
-                               {{ isset($datosFacturacion->telefono) ? 'readonly' : '' }} 
                                required>
                                
                         <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">
@@ -60,27 +71,47 @@
                     </div>
 
                     <div id="formulario_direccion" class="mt-3 ms-4 pe-3" style="display: none;">
-                        <div class="alert alert-light border rounded-3 mb-0">
-                            <strong class="d-block mb-1">Dirección de envío:</strong>
-
-                            @if(isset($datosFacturacion) && $datosFacturacion->direccion)
-                                <span class="fs-6">{{ $datosFacturacion->direccion }}</span>
-                                <hr class="my-2 text-muted">
-                                <small class="text-muted d-block" style="font-size: 0.75rem;">
-                                    <i class="fas fa-lock me-1"></i> Para modificar tu dirección de entrega, ingresá a <a href="/perfil" class="text-dark fw-bold">Mi Perfil</a>.
-                                </small>
-                            @else
-                                <span class="text-danger mb-2 d-block">No tenés una dirección guardada.</span>
-                                <small class="text-muted d-block mb-2" style="font-size: 0.75rem;">
-                                    Es necesario registrar una dirección en tu perfil para los envíos a domicilio.
-                                </small>
-                                <a href="/perfil" class="btn btn-sm btn-outline-dark">
-                                    Ir a mi perfil
-                                </a>
-                            @endif
-                        </div>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label text-muted small fw-bold">Dirección completa</label>
+                                <input type="text" class="form-control" name="direccion" id="input_direccion" placeholder="Ej: San Martín 123" value="{{ $datosFacturacion->direccion ?? '' }}">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label text-muted small fw-bold">Provincia</label>
+                        <select class="form-select" name="provincia" id="input_provincia">
+                            <option value="" selected disabled>Seleccioná tu provincia...</option>
+                            <option value="Buenos Aires">Buenos Aires</option>
+                            <option value="Catamarca">Catamarca</option>
+                            <option value="Chaco">Chaco</option>
+                            <option value="Chubut">Chubut</option>
+                            <option value="Córdoba">Córdoba</option>
+                            <option value="Corrientes">Corrientes</option>
+                            <option value="Entre Ríos">Entre Ríos</option>
+                            <option value="Formosa">Formosa</option>
+                            <option value="Jujuy">Jujuy</option>
+                            <option value="La Pampa">La Pampa</option>
+                            <option value="La Rioja">La Rioja</option>
+                            <option value="Mendoza">Mendoza</option>
+                            <option value="Misiones">Misiones</option>
+                            <option value="Neuquén">Neuquén</option>
+                            <option value="Río Negro">Río Negro</option>
+                            <option value="Salta">Salta</option>
+                            <option value="San Juan">San Juan</option>
+                            <option value="San Luis">San Luis</option>
+                            <option value="Santa Cruz">Santa Cruz</option>
+                            <option value="Santa Fe">Santa Fe</option>
+                            <option value="Santiago del Estero">Santiago del Estero</option>
+                            <option value="Tierra del Fuego">Tierra del Fuego</option>
+                            <option value="Tucumán">Tucumán</option>
+                    </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small fw-bold">Cód. Postal</label>
+                        <input type="text" class="form-control" name="codigo_postal" id="input_cp" placeholder="Ej: 3500">
                     </div>
                 </div>
+            </div>
+        </div>
 
                 <h5 class="mb-3 fw-bold">3. Método de pago</h5>
 
@@ -207,7 +238,12 @@
                 </div>
                 <div class="d-flex justify-content-between text-white-50 mb-3">
                     <span>Envío</span>
-                    <span class="fst-italic small">Aún sin calcular</span>
+                    <span id="resumen_envio" class="fst-italic small text-white-50">Aún sin calcular</span>
+                </div>
+
+                <div class="d-flex justify-content-between text-white fw-bold fs-4 pt-3 mt-2" style="border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                    <span>Total actual:</span>
+                    <span id="resumen_total" class="text-success" data-subtotal="{{ $subtotal }}">${{ number_format($total, 0, ',', '.') }}</span>
                 </div>
                 
                 <div class="d-flex justify-content-between text-white fw-bold fs-4 pt-3 mt-2" style="border-top: 1px solid rgba(255, 255, 255, 0.1);">
@@ -220,23 +256,28 @@
 <script>
     // 1. CONTROL DE VISIBILIDAD DE ENVÍO Y PAGO
     function toggleEnvio() {
-        const retiroSeleccionado = document.getElementById('retiro').checked;
-        const envioSeleccionado = document.getElementById('envio').checked;
-        const formularioDireccion = document.getElementById('formulario_direccion');
-        const btnComprar = document.getElementById('btn-comprar');
-        
-        const tieneDireccion = {{ (isset($datosFacturacion) && $datosFacturacion->direccion) ? 'true' : 'false' }};
+    const retiroSeleccionado = document.getElementById('retiro').checked;
+    const formularioDireccion = document.getElementById('formulario_direccion');
+    
+    // Capturamos los 3 campos nuevos por su ID
+    const inputDireccion = document.getElementById('input_direccion');
+    const inputProvincia = document.getElementById('input_provincia');
+    const inputCp = document.getElementById('input_cp');
 
-        formularioDireccion.style.display = retiroSeleccionado ? 'none' : 'block';
-
-        if (envioSeleccionado && !tieneDireccion) {
-            btnComprar.disabled = true;
-            btnComprar.classList.add('opacity-50');
-        } else {
-            btnComprar.disabled = false;
-            btnComprar.classList.remove('opacity-50');
-        }
+    if (retiroSeleccionado) {
+        // Ocultamos y quitamos la obligación de los 3
+        formularioDireccion.style.display = 'none';
+        if (inputDireccion) inputDireccion.removeAttribute('required');
+        if (inputProvincia) inputProvincia.removeAttribute('required');
+        if (inputCp) inputCp.removeAttribute('required');
+    } else {
+        // Mostramos y exigimos los 3
+        formularioDireccion.style.display = 'block';
+        if (inputDireccion) inputDireccion.setAttribute('required', 'required');
+        if (inputProvincia) inputProvincia.setAttribute('required', 'required');
+        if (inputCp) inputCp.setAttribute('required', 'required');
     }
+}
 
     function togglePago() {
         const mpSeleccionado = document.getElementById('pago_mp').checked;
@@ -351,6 +392,84 @@
             });
         }
     }); 
+
+    // Agregamos esto a tu script existente
+    document.addEventListener("DOMContentLoaded", function() {
+    const inputProvincia = document.getElementById('input_provincia');
+    const radioRetiro = document.getElementById('retiro');
+    const radioEnvio = document.getElementById('envio');
+
+    // Función que calcula el costo en vivo
+    function recalcularTotal() {
+        const resumenEnvio = document.getElementById('resumen_envio');
+        const resumenTotal = document.getElementById('resumen_total');
+        const subtotal = parseInt(resumenTotal.getAttribute('data-subtotal')) || 0;
+        
+        let costoEnvio = 0;
+        let textoEnvio = '';
+
+        if (radioRetiro && radioRetiro.checked) {
+            // Si retira por local, es gratis
+            costoEnvio = 0;
+            textoEnvio = 'Gratis';
+            resumenEnvio.className = 'text-success fw-bold small';
+        } else if (radioEnvio && radioEnvio.checked) {
+            const provincia = inputProvincia ? inputProvincia.value : '';
+            
+            if (provincia === '') {
+                textoEnvio = 'Aún sin calcular';
+                resumenEnvio.className = 'fst-italic small text-white-50';
+            } else {
+                // Replicamos las zonas del backend
+                const local = ['Corrientes', 'Chaco'];
+                const norte = ['Misiones', 'Formosa', 'Salta', 'Jujuy', 'Tucumán', 'Santiago del Estero', 'Catamarca', 'La Rioja'];
+                const medio = ['Buenos Aires', 'Santa Fe', 'Entre Ríos', 'Córdoba', 'La Pampa', 'San Juan', 'San Luis', 'Mendoza'];
+                const sur = ['Neuquén', 'Río Negro', 'Chubut', 'Santa Cruz', 'Tierra del Fuego'];
+
+                if (local.includes(provincia)) {
+                    costoEnvio = 0;
+                } else if (norte.includes(provincia)) {
+                    costoEnvio = 8000;
+                } else if (medio.includes(provincia)) {
+                    costoEnvio = 12000;
+                } else if (sur.includes(provincia)) {
+                    costoEnvio = 15000;
+                } else {
+                    costoEnvio = 6000;
+                }
+
+                // LA PROMO EN VIVO: Si supera 250.000, bonificamos
+                if (subtotal > 250000) {
+                    costoEnvio = 0;
+                    textoEnvio = 'Gratis';
+                    resumenEnvio.className = 'text-success fw-bold small';
+                } else if (costoEnvio === 0) {
+                    textoEnvio = 'Gratis';
+                    resumenEnvio.className = 'text-success fw-bold small';
+                } else {
+                    textoEnvio = '$' + costoEnvio.toLocaleString('es-AR');
+                    resumenEnvio.className = 'small text-white';
+                }
+            }
+        }
+
+        // Actualizamos los textos en pantalla
+        resumenEnvio.textContent = textoEnvio;
+        const totalFinal = subtotal + costoEnvio;
+        resumenTotal.textContent = '$' + totalFinal.toLocaleString('es-AR');
+    }
+
+    // Le decimos que escuche los cambios y recalcule
+    if (inputProvincia) {
+        inputProvincia.addEventListener('change', recalcularTotal);
+    }
+    if (radioRetiro) {
+        radioRetiro.addEventListener('change', recalcularTotal);
+    }
+    if (radioEnvio) {
+        radioEnvio.addEventListener('change', recalcularTotal);
+    }
+    });
 </script>
 
 </x-layout>

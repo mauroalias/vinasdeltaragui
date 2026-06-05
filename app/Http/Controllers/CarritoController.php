@@ -99,59 +99,105 @@ class CarritoController extends Controller
 ]);
     }
 
-   public function procesarCompra(Request $request)
-{
+   public function procesarCompra(Request $request){
+
+
+    // --- PASO 0: VALIDACIÓN DE DATOS DEL FORMULARIO ---
+    $request->validate([
+        'tipo_entrega'  => ['required', 'in:retiro,envio'],
+        'telefono'      => ['required', 'string', 'min:10', 'max:15', 'regex:/^[\+0-9\-\s]+$/'],
+        
+        // Acá está el cambio clave: ahora validamos "direccion", "provincia" y "codigo_postal"
+        'direccion'     => ['required_if:tipo_entrega,envio', 'nullable', 'string', 'min:5', 'max:255', 'regex:/[a-zA-ZáéíóúÁÉÍÓÚñÑ]/'],
+        'provincia'     => ['required_if:tipo_entrega,envio', 'nullable', 'string'],
+        'codigo_postal' => ['required_if:tipo_entrega,envio', 'nullable', 'string', 'min:4', 'max:8'],
+    ], [
+        'telefono.required'           => 'El teléfono es obligatorio.',
+        'telefono.min'                => 'El teléfono debe tener al menos 10 caracteres.',
+        'telefono.regex'              => 'El teléfono tiene un formato inválido.',
+        
+        // Mensajes actualizados para los 3 campos nuevos
+        'direccion.required_if'       => 'La calle y número son obligatorios para el envío.',
+        'direccion.min'               => 'La dirección es muy corta.',
+        'direccion.regex'             => 'La dirección debe ser real y contener letras.',
+        'provincia.required_if'       => 'Debés seleccionar una provincia de la lista.',
+        'codigo_postal.required_if'   => 'El código postal es obligatorio.',
+    ]);
+
     $carrito = session('carrito', []);
 
     if (empty($carrito)) {
         return redirect('/catalogo');
     }
 
-    $usuario = auth()->user();
-
-    if ($request->input('tipo_entrega') === 'envio') {
-        if (!$usuario->datosFacturacion || empty($usuario->datosFacturacion->direccion)) {
-            return redirect('/perfil')
-                ->with('error', 'Para solicitar envío a domicilio, primero debés registrar tu dirección en tu perfil.');
-        }
-        
-        if (empty($usuario->datosFacturacion->telefono)) {
-            return redirect('/perfil')
-                ->with('error', 'Necesitamos un teléfono de contacto para el envío. Por favor, actualizalo en tu perfil.');
-        }
-    }
-
-    // --- Validar stock ---
-    // Recorremos todo el carrito antes de crear la venta
+    // --- PASO 1: VALIDACIÓN DE STOCK ---
     foreach ($carrito as $item) {
         $producto = Producto::find($item['id']);
-
         if (!$producto || $producto->stock < $item['cantidad']) {
-            // Si falta stock de cualquier producto, abortamos para no generar comprobante vacio
-            return back()->with(
-                'error',
-                'No hay stock suficiente de ' . $item['nombre'] . '. Quedan ' . ($producto ? $producto->stock : 0) . ' unidades.'
-            );
+            return back()->with('error', 'No hay stock suficiente de ' . $item['nombre']);
         }
     }
 
-    // Si el codigo llego hasta aca, hay stock de todo
-    $total = 0;
-    foreach ($carrito as $item) {
-        $total += $item['precio'] * $item['cantidad'];
+    // --- PASO 1.5: UNIR LA DIRECCIÓN COMPLETA ---
+    // Atrapamos los 3 campos y los convertimos en un solo texto
+    $direccionFinal = null;
+    if ($request->input('tipo_entrega') === 'envio') {
+        $direccionFinal = $request->input('direccion') . ', ' . 
+                          $request->input('provincia') . ' (CP: ' . 
+                          $request->input('codigo_postal') . ')';
     }
 
+    // --- PASO 2: CREAR LA CABECERA ---
+    $subtotal = 0;
+    foreach ($carrito as $item) {
+        $subtotal += $item['precio'] * $item['cantidad'];
+    }
+
+    $costo_envio = 0;
+    if ($request->input('tipo_entrega') === 'envio') {
+        $provincia = $request->input('provincia');
+
+        // 1. Definimos las zonas (todas las provincias de Argentina)
+        $local = ['Corrientes', 'Chaco'];
+        $norte = ['Misiones', 'Formosa', 'Salta', 'Jujuy', 'Tucumán', 'Santiago del Estero', 'Catamarca', 'La Rioja'];
+        $medio = ['Buenos Aires', 'Santa Fe', 'Entre Ríos', 'Córdoba', 'La Pampa', 'San Juan', 'San Luis', 'Mendoza'];
+        $sur   = ['Neuquén', 'Río Negro', 'Chubut', 'Santa Cruz', 'Tierra del Fuego'];
+
+        // 2. Evaluamos el costo según la zona
+        if (in_array($provincia, $local)) {
+            $costo_envio = 0;
+        } elseif (in_array($provincia, $norte)) {
+            $costo_envio = 8000; // Precio Zona Norte
+        } elseif (in_array($provincia, $medio)) {
+            $costo_envio = 12000; // Precio Zona Centro/Medio
+        } elseif (in_array($provincia, $sur)) {
+            $costo_envio = 15000; // Precio Zona Sur
+        } else {
+            $costo_envio = 6000; // Por las dudas, un valor intermedio
+        }
+
+        // 3. ¡LA PROMO! Si gastó más de 250.000, el envío pasa a ser gratis
+        if ($subtotal > 250000) {
+            $costo_envio = 0;
+        }
+    }
+
+    $total_final = $subtotal + $costo_envio;
+
     $venta = VentaCabecera::create([
-        'user_id'     => auth()->id(),
-        'estado'      => 'confirmado',
-        'total'       => $total,
-        'fecha_venta' => now(),
+        'user_id'           => auth()->id(),
+        'estado'            => 'confirmado',
+        'total'             => $total_final, // Guardamos el total CON el envío sumado
+        'fecha_venta'       => now(),
+        'tipo_entrega'      => $request->input('tipo_entrega'),
+        'direccion_envio'   => $direccionFinal, 
+        'telefono_contacto' => $request->input('telefono'),
+        'costo_envio'       => $costo_envio, // Guardamos cuánto costó el envío
     ]);
 
-    // --- guardar detalles y descontar stock ---
+    // --- PASO 3: GUARDAR DETALLES (dejá el código que ya tenés acá abajo) ---
     foreach ($carrito as $item) {
-        $producto = Producto::find($item['id']); // Lo volvemos a instanciar
-
+        $producto = Producto::find($item['id']);
         VentaDetalle::create([
             'venta_id'        => $venta->id,
             'producto_id'     => $item['id'],
@@ -160,16 +206,11 @@ class CarritoController extends Controller
             'precio_unitario' => $item['precio'],
             'subtotal'        => $item['precio'] * $item['cantidad'],
         ]);
-
-        // Descontamos el stock
         $producto->stock -= $item['cantidad'];
         $producto->save();
     }
 
-    // Vaciar el carrito de sesión
     session()->forget('carrito');
-
-    // Redirigimos al comprobante nuevo pasando el ID
     return redirect('/comprobante/' . $venta->id)->with('mensaje', '¡Compra realizada con éxito!');
 }
 
