@@ -36,21 +36,38 @@ public function index()
 
 public function actualizarDatosFacturacion(Request $request)
 {
+    $reglas = [];
+    $mensajes = [];
+
+    if ($request->has('direccion')) {
+        $reglas['direccion'] = 'required|string|min:5|max:255';
+        $mensajes['direccion.required'] = 'La dirección no puede estar vacía.';
+        $mensajes['direccion.min'] = 'La dirección debe tener al menos 5 caracteres.';
+    }
+
+    if ($request->has('telefono')) {
+        $reglas['telefono'] = 'required|string|min:8|max:20';
+        $mensajes['telefono.required'] = 'El teléfono no puede estar vacío.';
+        $mensajes['telefono.min'] = 'El teléfono debe tener al menos 8 caracteres.';
+    }
+
+    $request->validate($reglas, $mensajes);
+
     $datos = auth()->user()->datosFacturacion()->firstOrCreate(
         ['user_id' => auth()->id()]
     );
 
-    if ($request->filled('direccion')) {
+    if ($request->has('direccion')) {
         $datos->direccion = $request->direccion;
     }
 
-    if ($request->filled('telefono')) {
+    if ($request->has('telefono')) {
         $datos->telefono = $request->telefono;
     }
 
     $datos->save();
 
-    return back()->with('success', 'Datos actualizados');
+    return back()->with('success', 'Datos actualizados correctamente.');
 }
     public function actualizarPassword(Request $request)
     {

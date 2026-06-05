@@ -25,7 +25,7 @@ class ProductoRequest extends FormRequest
 
             'stock' => 'required|integer|min:0',
 
-            'url_imagen' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'url_imagen' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
 
             'origen' => 'nullable|string|max:100',
 
@@ -57,6 +57,11 @@ class ProductoRequest extends FormRequest
             'url_imagen.image' => 'El archivo debe ser una imagen.',
 
             'url_imagen.mimes' => 'La imagen debe ser jpg, jpeg, png o webp.',
+
+            'url_imagen.required' => 'La imagen es obligatoria.',
+            
+            'descripcion.required' => 'La descripción es obligatoria.',
+
 
         ];
     }
