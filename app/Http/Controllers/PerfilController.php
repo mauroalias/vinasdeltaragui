@@ -54,11 +54,11 @@ public function actualizarDatosFacturacion(Request $request)
         ['user_id' => auth()->id()]
     );
 
-    if ($request->filled('direccion')) {
+    if ($request->has('direccion')) {
         $datos->direccion = $request->direccion;
     }
 
-    if ($request->filled('telefono')) {
+    if ($request->has('telefono')) {
         $datos->telefono = $request->telefono;
     }
 

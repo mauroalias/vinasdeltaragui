@@ -107,6 +107,9 @@
             <a href="/admin/contactos" class="btn btn-outline-dark rounded-2 px-4" style="font-size: 0.85rem; padding-top: 0.6rem; padding-bottom: 0.6rem; font-weight: 500;">
                 Ver consultas
             </a>
+            <a href="{{ route('admin.ventas.index') }}" class="btn btn-outline-dark rounded-2 px-4" style="font-size: 0.85rem; padding-top: 0.6rem; padding-bottom: 0.6rem; font-weight: 500;">
+                Ver historial de ventas completo
+            </a>
         </div>
     </div>
 

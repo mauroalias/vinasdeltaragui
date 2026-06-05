@@ -65,6 +65,8 @@ Route::middleware('auth')->group(function () {
         [AdminController::class, 'dashboard']
     );
 
+    Route::get('/admin/ventas', [AdminController::class, 'historialVentas'])->name('admin.ventas.index');
+    
     Route::get('/admin/clientes/{id}', [AdminController::class, 'verCliente'])->name('admin.cliente.historial');
    
     // LISTAR PRODUCTOS

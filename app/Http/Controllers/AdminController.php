@@ -8,6 +8,7 @@ use App\Models\Contacto;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductoRequest;
+use App\Models\VentaCabecera;
 
 class AdminController extends Controller
 {
@@ -36,8 +37,6 @@ class AdminController extends Controller
     {
         $this->verificarAdmin();
 
-        // Buscamos al usuario y cargamos sus relaciones. 
-        // Ordenamos las ventas de la más nueva a la más vieja.
         $cliente = User::with(['datosFacturacion', 'ventas' => function ($query) {
             $query->orderBy('fecha_venta', 'desc');
         }])->findOrFail($id);
@@ -45,6 +44,29 @@ class AdminController extends Controller
         return view('backend.admin.cliente-historial', compact('cliente'));
     }
 
+    public function historialVentas(Request $request)
+{
+    $this->verificarAdmin();
+
+    $query = VentaCabecera::with(['usuario', 'detalles'])
+        ->where('estado', 'confirmado');
+
+    if ($request->filled('buscar')) {
+        $buscar = $request->input('buscar');
+        
+        $query->where(function($q) use ($buscar) {
+            $q->where('id', $buscar)
+              ->orWhereHas('usuario', function($u) use ($buscar) {
+                  $u->where('name', 'like', "%{$buscar}%")
+                    ->orWhere('email', 'like', "%{$buscar}%");
+              });
+        });
+    }
+
+    $ventas = $query->latest('fecha_venta')->paginate(15);
+
+    return view('backend.admin.ventas-historial', compact('ventas'));
+}
     public function productos()
 {
     $this->verificarAdmin();

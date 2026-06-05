@@ -73,72 +73,91 @@
             </div>
         </div>
 
-        {{-- COLUMNA DERECHA --}}
-        <div class="col-md-9">
+       {{-- COLUMNA DERECHA --}}
+<div class="col-md-9">
 
-            {{-- Información personal --}}
-            <div class="card perfil-card p-4 mb-4">
-                <p class="seccion-titulo">Información personal</p>
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <div class="info-label">Nombre completo</div>
-                        <p class="info-value">{{ auth()->user()->name }}</p>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="info-label">Correo electrónico</div>
-                        <p class="info-value">{{ auth()->user()->email }}</p>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="info-label">Miembro desde</div>
-                        <p class="info-value">{{ auth()->user()->created_at->format('d/m/Y') }}</p>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="info-label">Dirección</div>
-                        <div class="d-flex align-items-center justify-content-between gap-2">
-                            <p class="info-value mb-0">{{ $datosFacturacion->direccion ?? 'No especificada' }}</p>
-                            <button class="btn btn-sm btn-outline-secondary rounded-2 flex-shrink-0"
-                                style="font-size:0.75rem; padding: 2px 10px;"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#editarDireccion">
-                                {{ isset($datosFacturacion->direccion) ? 'Editar' : 'Agregar' }}
-                            </button>
+    {{-- Información personal --}}
+    <div class="card perfil-card p-4 mb-4">
+        <p class="seccion-titulo">Información personal</p>
+        <div class="row g-3">
+            <div class="col-sm-6">
+                <div class="info-label">Nombre completo</div>
+                <p class="info-value">{{ auth()->user()->name }}</p>
+            </div>
+            <div class="col-sm-6">
+                <div class="info-label">Correo electrónico</div>
+                <p class="info-value">{{ auth()->user()->email }}</p>
+            </div>
+            <div class="col-sm-6">
+                <div class="info-label">Miembro desde</div>
+                <p class="info-value">{{ auth()->user()->created_at->format('d/m/Y') }}</p>
+            </div>
+            
+            {{-- Dirección --}}
+            <div class="col-sm-6">
+                <div class="info-label">Dirección</div>
+                <div class="d-flex align-items-center justify-content-between gap-2">
+                    <p class="info-value mb-0">{{ $datosFacturacion->direccion ?? 'No especificada' }}</p>
+                    <button class="btn btn-sm btn-outline-secondary rounded-2 flex-shrink-0"
+                        style="font-size:0.75rem; padding: 2px 10px;"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#editarDireccion">
+                        {{ isset($datosFacturacion->direccion) ? 'Editar' : 'Agregar' }}
+                    </button>
+                </div>
+                
+                <div class="collapse mt-2 @error('direccion') show @enderror" id="editarDireccion">
+                    <form action="{{ route('perfil.facturacion.actualizar') }}" method="POST" novalidate>
+                        @csrf @method('PUT')
+                        <div class="d-flex gap-2">
+                            <input type="text" name="direccion"
+                                class="form-control form-control-sm @error('direccion') is-invalid @enderror"
+                                placeholder="Ingresá tu dirección"
+                                value="{{ old('direccion', $datosFacturacion->direccion ?? '') }}">
+                            <button type="submit" class="btn btn-dark btn-sm rounded-2 flex-shrink-0">Guardar</button>
                         </div>
-                        <div class="collapse mt-2" id="editarDireccion">
-                            <form action="{{ route('perfil.facturacion.actualizar') }}" method="POST" class="d-flex gap-2">
-                                @csrf @method('PUT')
-                                <input type="text" name="direccion"
-                                    class="form-control form-control-sm"
-                                    placeholder="Ingresá tu dirección"
-                                    value="{{ $datosFacturacion->direccion ?? '' }}">
-                                <button type="submit" class="btn btn-dark btn-sm rounded-2 flex-shrink-0">Guardar</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="info-label">Teléfono</div>
-                        <div class="d-flex align-items-center justify-content-between gap-2">
-                            <p class="info-value mb-0">{{ $datosFacturacion->telefono ?? 'No especificado' }}</p>
-                            <button class="btn btn-sm btn-outline-secondary rounded-2 flex-shrink-0"
-                                style="font-size:0.75rem; padding: 2px 10px;"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#editarTelefono">
-                                {{ isset($datosFacturacion->telefono) ? 'Editar' : 'Agregar' }}
-                            </button>
-                        </div>
-                        <div class="collapse mt-2" id="editarTelefono">
-                            <form action="{{ route('perfil.facturacion.actualizar') }}" method="POST" class="d-flex gap-2">
-                                @csrf @method('PUT')
-                                <input type="text" name="telefono"
-                                    class="form-control form-control-sm"
-                                    placeholder="Ingresá tu teléfono"
-                                    value="{{ $datosFacturacion->telefono ?? '' }}">
-                                <button type="submit" class="btn btn-dark btn-sm rounded-2 flex-shrink-0">Guardar</button>
-                            </form>
-                        </div>
-                    </div>
+                        @error('direccion')
+                            <div class="text-danger mt-1" style="color: red; font-size: 0.85em;">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </form>
                 </div>
             </div>
 
+            {{-- Teléfono --}}
+            <div class="col-sm-6">
+                <div class="info-label">Teléfono</div>
+                <div class="d-flex align-items-center justify-content-between gap-2">
+                    <p class="info-value mb-0">{{ $datosFacturacion->telefono ?? 'No especificado' }}</p>
+                    <button class="btn btn-sm btn-outline-secondary rounded-2 flex-shrink-0"
+                        style="font-size:0.75rem; padding: 2px 10px;"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#editarTelefono">
+                        {{ isset($datosFacturacion->telefono) ? 'Editar' : 'Agregar' }}
+                    </button>
+                </div>
+                
+                <div class="collapse mt-2 @error('telefono') show @enderror" id="editarTelefono">
+                    <form action="{{ route('perfil.facturacion.actualizar') }}" method="POST" novalidate>
+                        @csrf @method('PUT')
+                        <div class="d-flex gap-2">
+                            <input type="text" name="telefono"
+                                class="form-control form-control-sm @error('telefono') is-invalid @enderror"
+                                placeholder="Ingresá tu teléfono"
+                                value="{{ old('telefono', $datosFacturacion->telefono ?? '') }}">
+                            <button type="submit" class="btn btn-dark btn-sm rounded-2 flex-shrink-0">Guardar</button>
+                        </div>
+                        @error('telefono')
+                            <div class="text-danger mt-1" style="color: red; font-size: 0.85em;">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
             {{-- Historial de compras --}}
             <div class="card perfil-card p-4">
                 <p class="seccion-titulo">Historial de compras</p>
@@ -157,7 +176,7 @@
                                     <th>Productos</th>
                                     <th>Total</th>
                                     <th>Estado</th>
-                                    <th>Comprobante</th>
+                                    <th>Factura</th>
                                 </tr>
                             </thead>
                             <tbody>
