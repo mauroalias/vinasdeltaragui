@@ -194,7 +194,6 @@ class CarritoController extends Controller
         }
 
         if (str_contains(url()->previous(), 'finalizar-compra')) {
-        return back();
         return $mensajeError ? back()->with('error', $mensajeError) : back();
         }
 
