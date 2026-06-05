@@ -36,23 +36,20 @@ public function index()
 
 public function actualizarDatosFacturacion(Request $request)
 {
-    $reglas = [];
-    $mensajes = [];
+    // 1. Validar los datos
+    $request->validate([
+        'direccion' => ['nullable', 'string', 'min:5', 'max:255', 'regex:/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\.\,]+$/', 'regex:/[a-zA-ZáéíóúÁÉÍÓÚñÑ]/'],
+        'telefono'  => ['nullable', 'string', 'min:10', 'max:15', 'regex:/^[\+0-9\-\s]+$/'],
+    ], [
+        'direccion.min'  => 'La dirección debe tener al menos 5 caracteres.',
+        'direccion.max'  => 'La dirección es demasiado larga.',
+        'direccion.regex' => 'La dirección debe ser un formato válido y contener letras (ej: Av. 9 de Julio 742).',
+        'telefono.min'   => 'El teléfono debe tener al menos 10 caracteres.',
+        'telefono.max'   => 'El teléfono no puede superar los 15 caracteres.',
+        'telefono.regex' => 'El teléfono solo puede contener números, espacios, guiones o el signo +.',
+    ]);
 
-    if ($request->has('direccion')) {
-        $reglas['direccion'] = 'required|string|min:5|max:255';
-        $mensajes['direccion.required'] = 'La dirección no puede estar vacía.';
-        $mensajes['direccion.min'] = 'La dirección debe tener al menos 5 caracteres.';
-    }
-
-    if ($request->has('telefono')) {
-        $reglas['telefono'] = 'required|string|min:8|max:20';
-        $mensajes['telefono.required'] = 'El teléfono no puede estar vacío.';
-        $mensajes['telefono.min'] = 'El teléfono debe tener al menos 8 caracteres.';
-    }
-
-    $request->validate($reglas, $mensajes);
-
+    // 2. Lógica para guardar o actualizar
     $datos = auth()->user()->datosFacturacion()->firstOrCreate(
         ['user_id' => auth()->id()]
     );
@@ -67,8 +64,9 @@ public function actualizarDatosFacturacion(Request $request)
 
     $datos->save();
 
-    return back()->with('success', 'Datos actualizados correctamente.');
-}
+    return back()->with('success', 'Datos actualizados');
+    }
+
     public function actualizarPassword(Request $request)
     {
         $request->validate([
