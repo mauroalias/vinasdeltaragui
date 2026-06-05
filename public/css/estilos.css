@@ -594,3 +594,101 @@
     background-color: #bb2d3b;
     color: white;
 }
+
+.perfil-avatar {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+    font-weight: 600;
+    background: #212529;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    letter-spacing: -1px;
+}
+
+.perfil-card {
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+
+.stat-box {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+}
+
+.stat-box .stat-num {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #212529;
+    margin-bottom: 4px;
+}
+
+.stat-box .stat-label {
+    font-size: 0.75rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.info-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #adb5bd;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #212529;
+    margin: 0;
+}
+
+.seccion-titulo {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #adb5bd;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.historial-table th {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #adb5bd;
+    font-weight: 600;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 0.75rem;
+}
+
+.historial-table td {
+    font-size: 0.9rem;
+    color: #495057;
+    padding: 0.85rem 0.5rem;
+    border-bottom: 1px solid #f8f9fa;
+    vertical-align: middle;
+}
+
+.historial-table tr:last-child td {
+    border-bottom: none;
+}
+
+.collapse-form input {
+    font-size: 0.875rem;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem 0.75rem;
+}

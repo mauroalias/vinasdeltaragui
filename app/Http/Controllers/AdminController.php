@@ -23,14 +23,26 @@ class AdminController extends Controller
         $this->verificarAdmin();
 
         return view('backend.admin.dashboard', [
-    'totalUsuarios' => User::count(),
+            'totalUsuarios' => User::count(),
+            'totalProductos' => Producto::count(),
+            'totalContactos' => Contacto::count(),
+            
+            
+            'usuarios' => User::with(['datosFacturacion', 'ventas'])->get(),
+        ]); 
+    }
 
-    'totalProductos' => Producto::count(),
+    public function verCliente($id)
+    {
+        $this->verificarAdmin();
 
-    'totalContactos' => Contacto::count(),
+        // Buscamos al usuario y cargamos sus relaciones. 
+        // Ordenamos las ventas de la más nueva a la más vieja.
+        $cliente = User::with(['datosFacturacion', 'ventas' => function ($query) {
+            $query->orderBy('fecha_venta', 'desc');
+        }])->findOrFail($id);
 
-    'usuarios' => User::all(),
-]); 
+        return view('backend.admin.cliente-historial', compact('cliente'));
     }
 
     public function productos()

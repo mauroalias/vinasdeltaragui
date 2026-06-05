@@ -50,7 +50,9 @@ Route::put('/perfil/password', [PerfilController::class, 'actualizarPassword'])
     ->middleware('auth')
     ->name('profile.update.password');
 
-
+Route::put('/perfil/datos-facturacion', [PerfilController::class, 'actualizarDatosFacturacion'])
+    ->middleware('auth')
+    ->name('perfil.facturacion.actualizar');
 /*
 Admin
 */
@@ -63,6 +65,8 @@ Route::middleware('auth')->group(function () {
         [AdminController::class, 'dashboard']
     );
 
+    Route::get('/admin/clientes/{id}', [AdminController::class, 'verCliente'])->name('admin.cliente.historial');
+   
     // LISTAR PRODUCTOS
     Route::get(
         '/admin/productos',

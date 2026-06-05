@@ -21,7 +21,36 @@ public function index()
     $totalCompras = $ventas->count();
     $totalGastado = $ventas->sum('total');
 
-    return view('frontend.perfil', compact('ventas', 'totalCompras', 'totalGastado'));
+    $datosFacturacion = auth()->user()->datosFacturacion;
+
+    return view(
+    'frontend.perfil',
+    compact(
+        'ventas',
+        'totalCompras',
+        'totalGastado',
+        'datosFacturacion'
+    )
+);
+}
+
+public function actualizarDatosFacturacion(Request $request)
+{
+    $datos = auth()->user()->datosFacturacion()->firstOrCreate(
+        ['user_id' => auth()->id()]
+    );
+
+    if ($request->filled('direccion')) {
+        $datos->direccion = $request->direccion;
+    }
+
+    if ($request->filled('telefono')) {
+        $datos->telefono = $request->telefono;
+    }
+
+    $datos->save();
+
+    return back()->with('success', 'Datos actualizados');
 }
     public function actualizarPassword(Request $request)
     {
