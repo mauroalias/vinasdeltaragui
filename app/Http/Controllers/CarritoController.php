@@ -100,77 +100,78 @@ class CarritoController extends Controller
     }
 
    public function procesarCompra(Request $request)
-    {
-        $carrito = session('carrito', []);
+{
+    $carrito = session('carrito', []);
 
-        if (empty($carrito)) {
-            return redirect('/catalogo');
+    if (empty($carrito)) {
+        return redirect('/catalogo');
+    }
+
+    $usuario = auth()->user();
+
+    if ($request->input('tipo_entrega') === 'envio') {
+        if (!$usuario->datosFacturacion || empty($usuario->datosFacturacion->direccion)) {
+            return redirect('/perfil')
+                ->with('error', 'Para solicitar envío a domicilio, primero debés registrar tu dirección en tu perfil.');
         }
-
-        // --- INICIO DE LA NUEVA VALIDACIÓN DE ENVÍO ---
-        $usuario = auth()->user();
-
-        if ($request->input('tipo_entrega') === 'envio') {
-            
-            
-            if (!$usuario->datosFacturacion || empty($usuario->datosFacturacion->direccion)) {
-                return redirect('/perfil') // 
-                    ->with('error', 'Para solicitar envío a domicilio, primero debés registrar tu dirección en tu perfil.');
-            }
-            
-            // Verificamos también el teléfono (muy importante para los envíos)
-            if (empty($usuario->datosFacturacion->telefono)) {
-                return redirect('/perfil')
-                    ->with('error', 'Necesitamos un teléfono de contacto para el envío. Por favor, actualizalo en tu perfil.');
-            }
+        
+        if (empty($usuario->datosFacturacion->telefono)) {
+            return redirect('/perfil')
+                ->with('error', 'Necesitamos un teléfono de contacto para el envío. Por favor, actualizalo en tu perfil.');
         }
-        // --- FIN DE LA NUEVA VALIDACIÓN ---
+    }
 
-        // Calcular total
-        $total = 0;
-        foreach ($carrito as $item) {
-            $total += $item['precio'] * $item['cantidad'];
+    // --- Validar stock ---
+    // Recorremos todo el carrito antes de crear la venta
+    foreach ($carrito as $item) {
+        $producto = Producto::find($item['id']);
+
+        if (!$producto || $producto->stock < $item['cantidad']) {
+            // Si falta stock de cualquier producto, abortamos para no generar comprobante vacio
+            return back()->with(
+                'error',
+                'No hay stock suficiente de ' . $item['nombre'] . '. Quedan ' . ($producto ? $producto->stock : 0) . ' unidades.'
+            );
         }
+    }
 
-        // Crear la cabecera de la venta
-        $venta = VentaCabecera::create([
-            'user_id'     => auth()->id(),
-            'estado'      => 'confirmado',
-            'total'       => $total,
-            'fecha_venta' => now(),
+    // Si el codigo llego hasta aca, hay stock de todo
+    $total = 0;
+    foreach ($carrito as $item) {
+        $total += $item['precio'] * $item['cantidad'];
+    }
+
+    $venta = VentaCabecera::create([
+        'user_id'     => auth()->id(),
+        'estado'      => 'confirmado',
+        'total'       => $total,
+        'fecha_venta' => now(),
+    ]);
+
+    // --- guardar detalles y descontar stock ---
+    foreach ($carrito as $item) {
+        $producto = Producto::find($item['id']); // Lo volvemos a instanciar
+
+        VentaDetalle::create([
+            'venta_id'        => $venta->id,
+            'producto_id'     => $item['id'],
+            'nombre_producto' => $item['nombre'],
+            'cantidad'        => $item['cantidad'],
+            'precio_unitario' => $item['precio'],
+            'subtotal'        => $item['precio'] * $item['cantidad'],
         ]);
 
-        // Guardar cada producto como detalle
-        foreach ($carrito as $item) {
-
-            $producto = Producto::find($item['id']);
-
-            if (!$producto || $producto->stock < $item['cantidad']) {
-                return back()->with(
-                    'error',
-                    'No hay stock suficiente de ' . $item['nombre']
-                );
-            }
-
-            VentaDetalle::create([
-                'venta_id'        => $venta->id,
-                'producto_id'     => $item['id'],
-                'nombre_producto' => $item['nombre'],
-                'cantidad'        => $item['cantidad'],
-                'precio_unitario' => $item['precio'],
-                'subtotal'        => $item['precio'] * $item['cantidad'],
-            ]);
-
-            $producto->stock -= $item['cantidad'];
-            $producto->save();
-        }
-
-        // Vaciar el carrito de sesión
-        session()->forget('carrito');
-
-        // Redirigimos al comprobante nuevo pasando el ID
-        return redirect('/comprobante/' . $venta->id)->with('mensaje', '¡Compra realizada con éxito!');
+        // Descontamos el stock
+        $producto->stock -= $item['cantidad'];
+        $producto->save();
     }
+
+    // Vaciar el carrito de sesión
+    session()->forget('carrito');
+
+    // Redirigimos al comprobante nuevo pasando el ID
+    return redirect('/comprobante/' . $venta->id)->with('mensaje', '¡Compra realizada con éxito!');
+}
 
     public function sumar($clave)
     {
