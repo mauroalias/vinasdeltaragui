@@ -52,15 +52,20 @@ class CarritoController extends Controller
     }
 
     public function eliminar($clave)
-    {
-        $carrito = session()->get('carrito', []);
+{
+    $carrito = session()->get('carrito', []);
 
-        unset($carrito[$clave]);
+    unset($carrito[$clave]);
 
-        session()->put('carrito', $carrito);
+    session()->put('carrito', $carrito);
 
-        return back()->with('carrito_abierto', true);
+    // verifica si viene de finalizar-compra
+    if (str_contains(url()->previous(), 'finalizar-compra')) {
+        return back();
     }
+
+    return back()->with('carrito_abierto', true);
+}
 
     public function finalizar()
     {
@@ -170,6 +175,7 @@ class CarritoController extends Controller
     public function sumar($clave)
     {
         $carrito = session()->get('carrito', []);
+        $mensajeError = null;
         
         if (isset($carrito[$clave])) {
             // Buscamos el producto real en la base de datos para consultar el stock
@@ -182,13 +188,20 @@ class CarritoController extends Controller
             } else {
                 // Capturamos el nombre exacto del producto desde el carrito
                 $nombreProducto = $carrito[$clave]['nombre'] ?? 'este producto';
-                
-                // Lo inyectamos en el mensaje
-                return back()->with('error', '¡Stock máximo alcanzado para ' . $nombreProducto . '!');
+                $mensajeError = 'Stock máximo alcanzado para ' . $nombreProducto;
             }
         }
-        
+
+        if (str_contains(url()->previous(), 'finalizar-compra')) {
         return back();
+        return $mensajeError ? back()->with('error', $mensajeError) : back();
+        }
+
+        if ($mensajeError) {
+        return back()->with('error', $mensajeError)->with('carrito_abierto', true);
+    }
+        
+        return back()->with('carrito_abierto', true);
     }
 
     public function restar($clave)
@@ -204,8 +217,12 @@ class CarritoController extends Controller
             }
             session()->put('carrito', $carrito);
         }
-        
+
+        if (str_contains(url()->previous(), 'finalizar-compra')) {
         return back();
+        }
+        
+        return back()->with('carrito_abierto', true);
     }
 
     public function vaciar()

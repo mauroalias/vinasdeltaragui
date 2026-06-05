@@ -114,15 +114,4 @@
 
 </div>
 
-@include('frontend.carrito-panel')
-
-@if(session('carrito_abierto'))
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    let carrito = new bootstrap.Offcanvas(document.getElementById('panelCarrito'));
-    carrito.show();
-});
-</script>
-@endif
-
 </x-layout>

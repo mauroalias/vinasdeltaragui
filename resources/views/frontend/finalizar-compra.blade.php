@@ -141,7 +141,6 @@
 
         <!-- Columna derecha -->
         <div class="col-lg-5">
-            <!-- Le sacamos el h-100, d-flex y flex-column para que no se estire hacia abajo -->
             <div class="p-4 rounded-4 text-white shadow-lg" style="background-color: #1f2227;">
                 
                 <div class="text-center mb-4">
@@ -158,7 +157,6 @@
                     </div>
                 @endif
 
-                <!-- Le sacamos flex-grow-1 -->
                 <div class="pe-2 mb-4">
                     @if(count($carrito) > 0)
                         @foreach($carrito as $clave => $item)
@@ -195,11 +193,10 @@
                     @endif
                 </div>
 
-                <!-- Le sacamos margin-top: auto al HR -->
                 <hr style="border-color: rgba(255, 255, 255, 0.15);">
 
                 <div class="text-center mb-4">
-                    <a href="/carrito/vaciar" class="text-danger text-decoration-none" style="font-size: 0.9rem;">
+                    <a href="/carrito/vaciar" class="text-danger text-decoration-none" style="font-size: 0.9rem;" onclick="return confirm('¿Seguro que querés vaciar todo el carrito?')">
                         <i class="fas fa-trash"></i> Vaciar el carrito
                     </a>
                 </div>
@@ -220,7 +217,7 @@
 
             </div>
         </div>
-        <script>
+<script>
     // 1. CONTROL DE VISIBILIDAD DE ENVÍO Y PAGO
     function toggleEnvio() {
         const retiroSeleccionado = document.getElementById('retiro').checked;
