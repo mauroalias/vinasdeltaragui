@@ -12,7 +12,7 @@ class ProductoRequest extends FormRequest
     }
 
     public function rules(): array
-    {
+    {   
         $isUpdate = $this->route('id') ? true : false;
 
         return [
