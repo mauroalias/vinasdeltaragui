@@ -199,38 +199,23 @@ class AdminController extends Controller
     );
 }
 
-public function actualizarProducto(
-    ProductoRequest $request,
-    $id
-) {
+public function actualizarProducto(ProductoRequest $request, $id) 
+{
     $this->verificarAdmin();
-
     $producto = Producto::findOrFail($id);
-
-    $datos = $request->validated();
+    $datos = $request->validated(); 
 
     if ($request->hasFile('url_imagen')) {
-
         $imagen = $request->file('url_imagen');
-
-        $nombreImagen =
-            time().'_'.$imagen->getClientOriginalName();
-
-        $imagen->move(
-            public_path('img/catalogoproductos'),
-            $nombreImagen
-        );
-
-        $datos['url_imagen'] =
-            'img/catalogoproductos/'.$nombreImagen;
+        $nombreImagen = time().'_'.$imagen->getClientOriginalName();
+        $imagen->move(public_path('img/catalogoproductos'), $nombreImagen);
+        $datos['url_imagen'] = 'img/catalogoproductos/'.$nombreImagen;
+    } else {
+        unset($datos['url_imagen']);
     }
 
     $producto->update($datos);
 
-    return redirect('/admin/productos')
-        ->with(
-            'success_message',
-            'Producto actualizado correctamente.'
-        );
+    return redirect('/admin/productos')->with('success_message', 'Producto actualizado correctamente.');
 }
 }
