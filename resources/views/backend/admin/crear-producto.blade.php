@@ -77,7 +77,7 @@
                 {{-- Imagen --}}
                 <div class="mb-3">
                     <label class="form-label">Imagen del producto</label>
-                    <input class="form-control @error('url_imagen') is-invalid @enderror" type="file" name="url_imagen" id="imagenProducto" accept="image/*">
+                    <input class="form-control @error('url_imagen') is-invalid @enderror" type="file" name="url_imagen" id="imagenProducto" accept=".jpg, .jpeg, .png, .webp">
                     @error('url_imagen')
                         <div class="text-danger mt-1" style="color: red; font-size: 0.85em;">
                             {{ $message }}

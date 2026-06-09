@@ -59,7 +59,7 @@
 
                 <div class="col-12 mb-4">
                     <label>Seleccionar nueva imagen</label>
-                    <input class="form-control mt-2" type="file" name="url_imagen" id="imagenProducto">
+                    <input class="form-control mt-2" type="file" name="url_imagen" id="imagenProducto" accept=".jpg, .jpeg, .png, .webp">
                     
                     @error('url_imagen')
                         <div class="text-danger mt-2">{{ $message }}</div>

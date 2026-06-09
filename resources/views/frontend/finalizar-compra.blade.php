@@ -32,11 +32,9 @@
                     </div>
                     <div class="col-12">
                         <label class="form-label text-muted small fw-bold">Teléfono de contacto</label>
-                        <input type="text" 
-                               class="form-control form-control-lg {{ isset($datosFacturacion->telefono) ? 'bg-light' : '' }}" 
-                               name="telefono" 
-                               value="{{ $datosFacturacion->telefono ?? '' }}" 
-                               required>
+                        <input type="tel" class="form-control form-control-lg {{ isset($datosFacturacion->telefono) ? 'bg-light' : '' }}" name="telefono" value="{{ $datosFacturacion->telefono ?? '' }}" pattern="[+0-9][0-9\- \s]{7,15}" 
+                        title="Ingresa un número de teléfono válido."
+                        required>
                                
                         <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">
                             @if(isset($datosFacturacion->telefono))
@@ -130,7 +128,7 @@
                             
                             <div class="col-12">
                                 <label class="form-label text-muted small fw-bold">Nombre del titular (como figura en la tarjeta)</label>
-                                <input type="text" class="form-control input-tarjeta-campo" name="titular_tarjeta" id="titular_tarjeta" value="{{ auth()->user()->name ?? '' }}" required>
+                                <input type="text" class="form-control input-tarjeta-campo" name="titular_tarjeta" id="titular_tarjeta" value="{{ auth()->user()->name ?? '' }}" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+" title="El nombre solo puede contener letras y espacios." required>
                             </div>
 
                             <div class="col-md-6">

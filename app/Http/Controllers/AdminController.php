@@ -106,7 +106,7 @@ class AdminController extends Controller
         );
 
         $datos['url_imagen'] =
-            'img/catalogoproductos/' . $nombreImagen;
+            'catalogoproductos/' . $nombreImagen;
     }
 
     Producto::create($datos);
@@ -209,7 +209,7 @@ public function actualizarProducto(ProductoRequest $request, $id)
         $imagen = $request->file('url_imagen');
         $nombreImagen = time().'_'.$imagen->getClientOriginalName();
         $imagen->move(public_path('img/catalogoproductos'), $nombreImagen);
-        $datos['url_imagen'] = 'img/catalogoproductos/'.$nombreImagen;
+        $datos['url_imagen'] = 'catalogoproductos/'.$nombreImagen;
     } else {
         unset($datos['url_imagen']);
     }

@@ -100,9 +100,6 @@
                             </div>
                         @enderror
 
-                        <small class="text-muted">
-                            La contraseña debe tener al menos 8 caracteres.
-                        </small>
                     </div>
 
                     <div class="mb-3">
