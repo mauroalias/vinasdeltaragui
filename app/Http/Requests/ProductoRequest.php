@@ -38,14 +38,26 @@ class ProductoRequest extends FormRequest
     {
         return [
             'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.max' => 'El nombre no puede superar los 150 caracteres.',
             'precio.required' => 'El precio es obligatorio.',
-            'precio.numeric' => 'El precio debe ser numérico.',
+            'precio.numeric' => 'El precio debe ser un número.',
+            'precio.min' => 'El precio debe ser de al menos $1.',
             'stock.required' => 'El stock es obligatorio.',
+            'stock.integer' => 'El stock debe ser un número entero.',
+            'stock.min' => 'El stock no puede ser menor a 0.',
             'categoria_id.required' => 'La categoría es obligatoria.',
-            'url_imagen.image' => 'El archivo debe ser una imagen.',
-            'url_imagen.mimes' => 'La imagen debe ser jpg, jpeg, png o webp.',
+            'categoria_id.exists' => 'La categoría seleccionada no es válida.',
             'url_imagen.required' => 'La imagen es obligatoria.',
+            'url_imagen.image' => 'El archivo debe ser una imagen.',
+            'url_imagen.mimes' => 'La imagen debe estar en formato: jpg, jpeg, png o webp.',
+            'url_imagen.max' => 'La imagen no puede pesar más de 2 MB.',
             'descripcion.required' => 'La descripción es obligatoria.',
+            'descripcion.max' => 'La descripción no puede superar los 1000 caracteres.',
+            'origen.max' => 'El origen no puede superar los 100 caracteres.',
+            'bodega.max' => 'La bodega no puede superar los 100 caracteres.',
+            'graduacion.max' => 'La graduación no puede superar los 50 caracteres.',
+            'volumen.max' => 'El volumen no puede superar los 50 caracteres.',
+            'variedad.max' => 'La variedad no puede superar los 100 caracteres.',
         ];
     }
 }

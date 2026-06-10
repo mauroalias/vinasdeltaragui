@@ -146,20 +146,30 @@ class AdminController extends Controller
         $this->verificarAdmin();
 
         $request->validate([
-            'id' => 'required|exists:productos,id',
+            'id' => 'required|integer|min:1|exists:productos,id',
+        ], [
+            'id.required' => 'Debes ingresar el ID del producto.',
+            'id.integer'  => 'El ID debe ser un número entero.',
+            'id.min'      => 'El ID debe ser un número válido mayor a 0.',
+            'id.exists'   => 'El ID ingresado no coincide con ningún producto registrado.',
         ]);
 
         $producto = Producto::findOrFail($request->id);
 
-        $producto->activo = 0;
+        if ($producto->activo == 0) {
+            return redirect()->back()
+                ->withErrors(['id' => 'Este producto ya se encuentra dado de baja actualmente.'])
+                ->withInput();
+        }
 
+        $producto->activo = 0;
         $producto->save();
 
         return redirect()
             ->back()
             ->with(
                 'success',
-                'Producto dado de baja correctamente'
+                'El producto "' . $producto->nombre . '" se dio de baja correctamente.'
             );
     }
 
