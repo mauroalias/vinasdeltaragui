@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\DatosFacturacion;
-use App\Models\VentaCabecera; // <-- Importamos VentaCabecera
+use App\Models\VentaCabecera; 
 
 #[Fillable(['name', 'email', 'password', 'rol', 'fecha_nacimiento'])]
 #[Hidden(['password', 'remember_token'])]
@@ -32,13 +32,11 @@ class User extends Authenticatable
         ];
     }
 
-    // Relación con los datos de facturación
     public function datosFacturacion()
     {
         return $this->hasOne(DatosFacturacion::class);
     }
 
-    // Relación con las compras del usuario (VentaCabecera)
     public function ventas()
     {
         return $this->hasMany(VentaCabecera::class, 'user_id');

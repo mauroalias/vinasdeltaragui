@@ -22,7 +22,7 @@
                     </div>
                 @endif
 
-                <form action="/registro" method="POST">
+                <form action="/registro" method="POST" novalidate>
 
                     @csrf
 

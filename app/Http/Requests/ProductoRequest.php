@@ -51,6 +51,7 @@ class ProductoRequest extends FormRequest
             'url_imagen.image' => 'El archivo debe ser una imagen.',
             'url_imagen.mimes' => 'La imagen debe estar en formato: jpg, jpeg, png o webp.',
             'url_imagen.max' => 'La imagen no puede pesar más de 2 MB.',
+            'url_imagen.uploaded' => 'La imagen no puede pesar más de 2 MB o el formato no es válido.',
             'descripcion.required' => 'La descripción es obligatoria.',
             'descripcion.max' => 'La descripción no puede superar los 1000 caracteres.',
             'origen.max' => 'El origen no puede superar los 100 caracteres.',
