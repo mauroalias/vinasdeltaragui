@@ -145,7 +145,10 @@
                             <input type="text" name="telefono"
                                 class="form-control form-control-sm @error('telefono') is-invalid @enderror"
                                 placeholder="Ingresá tu teléfono"
-                                value="{{ old('telefono', $datosFacturacion->telefono ?? '') }}">
+                                value="{{ old('telefono', $datosFacturacion->telefono ?? '') }}"
+                                pattern=".*[0-9].*"
+                                title="El teléfono no puede estar vacío ni contener solo guiones. Debe incluir números."
+                                required>
                             <button type="submit" class="btn btn-dark btn-sm rounded-2 flex-shrink-0">Guardar</button>
                         </div>
                         @error('telefono')

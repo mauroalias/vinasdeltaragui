@@ -39,7 +39,7 @@ public function actualizarDatosFacturacion(Request $request)
     // 1. Validar los datos
     $request->validate([
         'direccion' => ['nullable', 'string', 'min:5', 'max:255', 'regex:/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\.\,]+$/', 'regex:/[a-zA-ZáéíóúÁÉÍÓÚñÑ]/'],
-        'telefono'  => ['nullable', 'string', 'min:10', 'max:15', 'regex:/^[\+0-9\-\s]+$/'],
+        'telefono'  => ['nullable', 'string', 'min:10', 'max:15', 'regex:/^(?=.*[0-9])[\+0-9\-\s]+$/'],
     ], [
         'direccion.min'  => 'La dirección debe tener al menos 5 caracteres.',
         'direccion.max'  => 'La dirección es demasiado larga.',
