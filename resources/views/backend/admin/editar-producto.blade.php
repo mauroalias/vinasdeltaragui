@@ -15,8 +15,7 @@
             {{-- Nombre --}}
             <div class="col-md-6 mb-3">
                 <label class="form-label fw-semibold">Nombre</label>
-                <input type="text" name="nombre" class="form-control rounded-3 @error('nombre') is-invalid @enderror" value="{{ old('nombre', $producto->nombre) }}" required>
-                @error('nombre')
+                <input type="text" name="nombre" class="form-control rounded-3 @error('nombre') is-invalid @enderror" value="{{ old('nombre') != '' ? old('nombre') : $producto->nombre }}" required>                @error('nombre')
                     <div class="invalid-feedback fw-semibold">{{ $message }}</div>
                 @enderror
             </div>
@@ -39,7 +38,7 @@
             {{-- Precio --}}
             <div class="col-md-6 mb-3">
                 <label class="form-label fw-semibold">Precio</label>
-                <input type="number" step="0.01" name="precio" class="form-control rounded-3 @error('precio') is-invalid @enderror" value="{{ old('precio', $producto->precio) }}" required>
+                <input type="number" step="0.01" name="precio" class="form-control rounded-3 @error('precio') is-invalid @enderror" value="{{ old('precio') !== null ? old('precio') : $producto->precio }}" required>
                 @error('precio')
                     <div class="invalid-feedback fw-semibold">{{ $message }}</div>
                 @enderror
@@ -48,7 +47,7 @@
             {{-- Stock --}}
             <div class="col-md-6 mb-3">
                 <label class="form-label fw-semibold">Stock</label>
-                <input type="number" name="stock" class="form-control rounded-3 @error('stock') is-invalid @enderror" value="{{ old('stock', $producto->stock) }}" required>
+                <input type="number" name="stock" class="form-control rounded-3 @error('stock') is-invalid @enderror" value="{{ old('stock') !== null ? old('stock') : $producto->stock }}" required>
                 @error('stock')
                     <div class="invalid-feedback fw-semibold">{{ $message }}</div>
                 @enderror
@@ -57,8 +56,7 @@
             {{-- Descripción --}}
             <div class="col-12 mb-3">
                 <label class="form-label fw-semibold">Descripción</label>
-                <textarea name="descripcion" class="form-control rounded-3 @error('descripcion') is-invalid @enderror" rows="3">{{ old('descripcion', $producto->descripcion) }}</textarea>
-                @error('descripcion')
+                <textarea name="descripcion" class="form-control rounded-3 @error('descripcion') is-invalid @enderror" rows="3">{{ old('descripcion') != '' ? old('descripcion') : $producto->descripcion }}</textarea>                @error('descripcion')
                     <div class="invalid-feedback fw-semibold">{{ $message }}</div>
                 @enderror
             </div>

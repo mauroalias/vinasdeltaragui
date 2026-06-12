@@ -1,4 +1,8 @@
-<x-layout title="Comprobante de Compra">
+@php
+    $nombreLayout = (auth()->check() && auth()->user()->rol === 'admin') ? 'admin-layout' : 'layout';
+@endphp
+
+<x-dynamic-component :component="$nombreLayout" title="Comprobante de Compra">
 
 <div class="container my-5">
     <div class="row justify-content-center">
@@ -15,7 +19,7 @@
                 <div class="p-4 text-center text-white" style="background-color: #1f2227;">
                     <img src="{{ asset('img/logo1.png') }}" alt="Viñas del Taragüí" style="max-height: 80px;" class="mb-3">
                     <h4 class="text-uppercase fw-light mb-0" style="letter-spacing: 2px;">Comprobante de Pedido</h4>
-                    <p class="text-white-50 mb-0 mt-2 small">¡Gracias por tu compra, {{ auth()->user()->name }}!</p>
+                    <p class="text-white-50 mb-0 mt-2 small">¡Gracias por tu compra, {{ $pedido->usuario->name }}!</p>
                 </div>
 
                 <div class="card-body p-4 p-md-5 bg-white">
@@ -90,4 +94,4 @@
     }
 </style>
 
-</x-layout>
+</x-dynamic-component>

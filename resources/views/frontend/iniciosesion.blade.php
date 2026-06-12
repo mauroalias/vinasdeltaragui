@@ -8,14 +8,21 @@
 
             <div class="card-body p-4">
 
+                @if(session('mensaje'))
+                    <div class="alert alert-warning text-center">
+                    {{ session('mensaje') }}
+                    </div>
+                @endif
+
                 <h3 class="text-center mb-4">
                     Iniciar sesión
                 </h3>
                 @if(session('success_message'))
-                 <div class="alert alert-success text-center">
-                 {{ session('success_message') }}
-                </div>
+                    <div class="alert alert-success text-center">
+                    {{ session('success_message') }}
+                    </div>
                 @endif
+                
                 <form action="/iniciosesion" method="POST">
 
                     @csrf
@@ -94,6 +101,13 @@
                     </div>
 
                 </form>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0">
+                        ¿Aún no tenés cuenta? 
+                        <a href="/registro" class="text-decoration-none fw-bold">Regístrate</a>
+                    </p>
+                </div>
 
             </div>
 

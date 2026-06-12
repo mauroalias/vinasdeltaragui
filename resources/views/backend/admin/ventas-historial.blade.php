@@ -65,6 +65,9 @@
                             </td>
                             <td class="text-end pe-4">
                                 <div class="d-inline-flex gap-2">
+                                    <a href="/comprobante/{{ $venta->id }}" target="_blank" class="btn btn-sm btn-outline-dark rounded-2">
+                                        <i class="fas fa-file-invoice me-1"></i> Detalles
+                                    </a>
                                     <a href="{{ route('admin.cliente.historial', $venta->user_id) }}" class="btn btn-sm btn-outline-primary rounded-2">
                                         <i class="fas fa-user me-1"></i> Perfil Cliente
                                     </a>

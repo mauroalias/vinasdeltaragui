@@ -176,7 +176,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Fecha</th>
-                                    <th>Productos</th>
+                                    <th>Metodo de Pago</th>
                                     <th>Total</th>
                                     <th>Estado</th>
                                     <th>Factura</th>
@@ -189,7 +189,11 @@
                                     <td>{{ $venta->fecha_venta->format('d/m/Y') }}
                                         <span class="text-muted" style="font-size:0.8rem;">{{ $venta->fecha_venta->format('H:i') }}</span>
                                     </td>
-                                    <td>{{ $venta->detalles->count() }} producto/s</td>
+                                    <td>
+                                        <span class="badge bg-success text-uppercase" style="letter-spacing: 0.5px;">
+                                            {{ $venta->metodo_pago }}
+                                        </span>
+                                    </td>
                                     <td>${{ number_format($venta->total, 0, ',', '.') }}</td>
                                     <td>
                                         <span class="badge bg-success rounded-pill px-3"

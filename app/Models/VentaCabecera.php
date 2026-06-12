@@ -16,7 +16,8 @@ class VentaCabecera extends Model
     'tipo_entrega',       
     'direccion_envio',    
     'telefono_contacto',  
-    'costo_envio'         
+    'costo_envio',
+    'metodo_pago',      
 ];
 
     protected $casts = ['fecha_venta' => 'datetime'];

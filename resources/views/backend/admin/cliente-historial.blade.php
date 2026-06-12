@@ -67,6 +67,11 @@
                                         {{ ucfirst($venta->estado) }}
                                     </span>
                                 </td>
+                                <td>
+                                    <a href="/comprobante/{{ $venta->id }}" target="_blank" class="btn btn-sm btn-outline-dark rounded-2">
+                                        <i class="fas fa-file-invoice me-1"></i> Detalles
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

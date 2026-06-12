@@ -104,7 +104,7 @@ class CarritoController extends Controller
     $request->validate([
         'tipo_entrega'  => ['required', 'in:retiro,envio'],
         'telefono'      => ['required', 'string', 'min:10', 'max:15', 'regex:/^[\+0-9\-\s]+$/'],
-        
+        'pago'          => ['required', 'in:tarjeta,transferencia'],
         'direccion'     => ['required_if:tipo_entrega,envio', 'nullable', 'string', 'min:5', 'max:255', 'regex:/[a-zA-ZáéíóúÁÉÍÓÚñÑ]/'],
         'provincia'     => ['required_if:tipo_entrega,envio', 'nullable', 'string'],
         'codigo_postal' => ['required_if:tipo_entrega,envio', 'nullable', 'string', 'min:4', 'max:8'],
@@ -182,6 +182,7 @@ class CarritoController extends Controller
         'direccion_envio'   => $direccionFinal, 
         'telefono_contacto' => $request->input('telefono'),
         'costo_envio'       => $costo_envio, // Guardamos cuánto costó el envío
+        'metodo_pago'       => $request->input('pago'),
     ]);
 
     foreach ($carrito as $item) {
@@ -270,9 +271,9 @@ class CarritoController extends Controller
 
     public function comprobante($id)
     {
-        $pedido = VentaCabecera::with('detalles')->findOrFail($id);
+        $pedido = VentaCabecera::with('detalles', 'usuario')->findOrFail($id);
 
-        if ($pedido->user_id !== auth()->id()) {
+        if ($pedido->user_id !== auth()->id() && auth()->user()->rol !== 'admin') {
             abort(403, 'No tienes permiso para ver este comprobante.');
         }
 
