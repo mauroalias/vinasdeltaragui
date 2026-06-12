@@ -48,6 +48,7 @@
                         <tr>
                             <th>Pedido #</th>
                             <th>Fecha</th>
+                            <th>Metodo de pago</th>
                             <th>Total</th>
                             <th>Estado</th>
                         </tr>
@@ -58,6 +59,11 @@
                                 <td class="text-muted">{{ $venta->id }}</td>
                                 <td>
                                     {{ $venta->fecha_venta->format('d/m/Y - H:i') }}
+                                </td>
+                                <td>
+                                    <span class="badge bg-success text-uppercase" style="letter-spacing: 0.5px;">
+                                        {{ $venta->metodo_pago }}
+                                     </span>
                                 </td>
                                 <td class="fw-bold">
                                     ${{ number_format($venta->total, 0, ',', '.') }}

@@ -38,7 +38,7 @@
                             <th class="ps-4">Pedido #</th>
                             <th>Cliente</th>
                             <th>Fecha y Hora</th>
-                            <th>Productos</th>
+                            <th>Metodo de pago</th>
                             <th>Total</th>
                             <th class="text-end pe-4">Acciones</th>
                         </tr>
@@ -56,9 +56,9 @@
                                 <small class="text-muted">{{ $venta->fecha_venta->format('H:i') }} hs</small>
                             </td>
                             <td>
-                                <span class="badge bg-secondary rounded-pill px-2.5 py-1.5">
-                                    {{ $venta->detalles->count() }} prod.
-                                </span>
+                                    <span class="badge bg-success text-uppercase" style="letter-spacing: 0.5px;">
+                                        {{ $venta->metodo_pago }}
+                                     </span>
                             </td>
                             <td class="fw-bold text-dark">
                                 ${{ number_format($venta->total, 0, ',', '.') }}
