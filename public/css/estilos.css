@@ -692,3 +692,26 @@
     border: 1px solid #dee2e6;
     padding: 0.5rem 0.75rem;
 }
+
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.01) !important;
+    transition: background-color 0.2s ease;
+}
+
+.fila-nueva {
+    background-color: rgba(251, 248, 246, 0.7) !important; /* Tono cálido sutil */
+    border-left: 4px solid #dc3545 !important; /* Indicador elegante de "sin leer" */
+}
+
+.fila-leida {
+    border-left: 4px solid transparent !important;
+}
+
+.btn-accion {
+    transition: all 0.2s ease;
+}
+
+.btn-accion:hover {
+    transform: translateY(-1px);
+}

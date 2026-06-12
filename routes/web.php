@@ -11,9 +11,7 @@ use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PerfilController;
 
-/*
-Frontend
-*/
+//Frontend
 
 Route::get('/', function () {
     return view('frontend.inicio');
@@ -53,9 +51,8 @@ Route::put('/perfil/password', [PerfilController::class, 'actualizarPassword'])
 Route::put('/perfil/datos-facturacion', [PerfilController::class, 'actualizarDatosFacturacion'])
     ->middleware('auth')
     ->name('perfil.facturacion.actualizar');
-/*
-Admin
-*/
+
+//Admin
 
 Route::middleware('auth')->group(function () {
 
@@ -114,12 +111,13 @@ Route::middleware('auth')->group(function () {
         [AdminController::class, 'contactos']
     );
 
+    Route::post(
+        '/admin/contactos/{id}/alternar-leido', 
+        [App\Http\Controllers\AdminController::class, 'alternarLeido'])->name('admin.contactos.alternar');
+
 });
 
-
-/*
-Carrito
-*/
+//Carrito
 
 Route::post('/carrito/agregar/{tipo}/{id}',
     [CarritoController::class, 'agregar']);
@@ -148,9 +146,7 @@ Route::get('/carrito/vaciar',
 Route::get('/comprobante/{id}',
     [CarritoController::class, 'comprobante'])->middleware('auth');
 
-/*
-Catálogo
-*/
+//Catálogo
 
 Route::get('/catalogo',
     [CatalogoController::class, 'catalogocompleto']);
@@ -161,10 +157,7 @@ Route::get('/catalogo/{tipo}',
 Route::get('/catalogo/{tipo}/{id}',
     [CatalogoController::class, 'detalle']);
 
-
-/*
-Empresa
-*/
+//Empresa
 
 Route::get('/empresa',
     [EmpresaController::class, 'empresa']);
@@ -172,10 +165,7 @@ Route::get('/empresa',
 Route::get('/comercializacion',
     [ComercializacionController::class, 'comercializacion']);
 
-
-/*
-Formularios
-*/
+//Formularios
 
 Route::post('/contacto',
     [ContactoController::class, 'store_contact']);
@@ -198,5 +188,3 @@ Route::post(
     '/admin/productos/reactivar',
     [AdminController::class, 'reactivarProducto']
 );
-
-//Route::resource('productos',ProductoController::class );

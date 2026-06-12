@@ -228,4 +228,15 @@ public function actualizarProducto(ProductoRequest $request, $id)
 
     return redirect('/admin/productos')->with('success_message', 'Producto actualizado correctamente.');
 }
+
+public function alternarLeido($id)
+{
+    $this->verificarAdmin();
+
+    $contacto = Contacto::findOrFail($id);
+    $contacto->leido = !$contacto->leido; 
+    $contacto->save();
+
+    return redirect()->back()->with('success_message', 'Estado de la consulta actualizado correctamente.');
+}
 }
